@@ -61,8 +61,6 @@ def course_view(request, course_code):
     course = Course.objects.get(course_code=course_code)
     students = course.student_set.all()
     prof2 = request.user.UserProfile
-    stud2 = None
-    ins2 = None
     stud2 = prof2.student_set.filter(course=course)
     ins2 = prof2.instructor_set.filter(course=course)
     head_instructor = course.head_instructor
