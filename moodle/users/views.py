@@ -63,10 +63,8 @@ def course_view(request, course_code):
     prof2 = request.user.UserProfile
     stud2 = None
     ins2 = None
-    if prof2.student_set.all():
-        stud2 = prof2.student_set.all()[0]
-    if prof2.instructor_set.all():
-        ins2 = prof2.instructor_set.all()[0]
+    stud2 = prof2.student_set.filter(course=course)
+    ins2 = prof2.instructor_set.filter(course=course)
     head_instructor = course.head_instructor
     profile = head_instructor.UserProfile
     instructors = course.instructor_set.all()
@@ -74,11 +72,11 @@ def course_view(request, course_code):
         return render(request, 'courses/course_view_head.html', {'code': course_code, 'head': profile.name,
                                                                  'all_students': students,
                                                                  'all_instructors': instructors})
-    elif stud2 in students:
+    elif stud2:
         return render(request, 'courses/course_view_stud.html', {'code': course_code, 'head': profile.name,
                                                                  'all_students': students,
                                                                  'all_instructors': instructors})
-    elif ins2 in instructors:
+    elif ins2:
         return render(request, 'courses/course_view_ins.html', {'code': course_code, 'head': profile.name,
                                                                 'all_students': students,
                                                                 'all_instructors': instructors})
