@@ -35,7 +35,7 @@ def about(request):
 @login_required(login_url='/login/')
 def home(request):
     context = {}
-    return render(request, 'users/home.html', context=context)
+    return render(request, 'users/dashboard.html', context=context)
 
 
 @login_required(login_url='/login/')
@@ -60,11 +60,32 @@ def course_create(request):
 def course_view(request, course_code):
     course = Course.objects.get(course_code=course_code)
     students = course.student_set.all()
+    prof2 = request.user.UserProfile
+    stud2 = None
+    ins2 = None
+    if prof2.student_set.all():
+        stud2 = prof2.student_set.all()[0]
+    if prof2.instructor_set.all():
+        ins2 = prof2.instructor_set.all()[0]
     head_instructor = course.head_instructor
     profile = head_instructor.UserProfile
     instructors = course.instructor_set.all()
-    return render(request, 'courses/course_view.html', {'code': course_code, 'head': profile.name,
-                                                        'all_students': students, 'all_instructors': instructors})
+    if request.user == head_instructor:
+        return render(request, 'courses/course_view_head.html', {'code': course_code, 'head': profile.name,
+                                                                 'all_students': students,
+                                                                 'all_instructors': instructors})
+    elif stud2 in students:
+        return render(request, 'courses/course_view_stud.html', {'code': course_code, 'head': profile.name,
+                                                                 'all_students': students,
+                                                                 'all_instructors': instructors})
+    elif ins2 in instructors:
+        return render(request, 'courses/course_view_ins.html', {'code': course_code, 'head': profile.name,
+                                                                'all_students': students,
+                                                                'all_instructors': instructors})
+    else:
+        return render(request, 'courses/course_view_not.html', {'code': course_code, 'head': profile.name,
+                                                                'all_students': students,
+                                                                'all_instructors': instructors})
 
 
 @login_required(login_url="/login/")

@@ -12,6 +12,9 @@ class Profile(models.Model):
     email = models.EmailField()
     user = OneToOneField(User, on_delete=models.CASCADE, related_name="UserProfile")
 
+    def __str__(self):
+        return self.name
+
  #   def create_course(self, course_name, description):
  #       new_course = Course(course_name=course_name,head_instructor=self.user, description=description)
  #       new_course.save()

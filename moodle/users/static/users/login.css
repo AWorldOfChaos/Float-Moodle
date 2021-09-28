@@ -1,0 +1,213 @@
+*{
+    box-sizing: border-box;
+}
+
+html{
+    height: 100%;
+}
+
+body{
+    align-content: center;
+    background-color: #0d1117;
+    font-size: 14px;
+    display: block;
+    justify-content: center;
+    height: 100%;
+    padding-top: 100px;
+    color: white;
+    
+}
+
+.container-fm{
+    justify-content: center;
+    align-content: center;
+    display: block;
+}
+
+.form{
+    height: auto;
+    background-color: #161b22;
+    background: linear-gradient(
+        45deg,
+        #152846,
+        #161b22
+    );
+
+    padding-top: 25px;
+    padding-bottom: 25px;
+    border-radius: 8px;
+    color: white;
+    border: 0.1em solid #303a47;
+    width: 400px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.submit{
+    background-color: #238636;
+    border-radius: 6px;
+    box-sizing: border-box;
+    color: white;
+    height: 35px;
+    width: 100%;
+    text-align: center;
+    margin-top: 25px;
+    border:0;
+    cursor: pointer;
+    font-weight: bold;
+
+}
+button:hover{
+    background-color: rgb(5, 104, 22);
+}
+.submit:active{
+    background-color: #20b43e;
+}
+
+.asteriskField{
+    visibility: hidden;
+}
+
+
+#id_username{
+    background-color: #0d1117;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: white;
+    border-color: #303a47;
+    border-radius: 4px;
+
+}
+
+#id_password{
+    background-color: #0d1117;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: white;
+    border-color: #303a47;
+    border-radius: 2px;
+}
+
+#div_id_password1{
+    margin-top: 20px;
+}
+
+#div_id_password2{
+    margin-top: 20px;
+}
+
+#id_password1{
+    background-color: #0d1117;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: white;
+    border-color: #303a47;
+    border-radius: 4px;
+}
+
+#hint_id_password1 ul{
+    list-style: none;
+    padding-left: 0;
+}
+
+#id_name{
+    background-color: #0d1117;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: white;
+    border-color: #303a47;
+    border-radius: 2px;
+}
+
+.ask-user{
+    background-color: #0d1117;
+    box-sizing: border-box;
+    border-radius: 6px;
+    border:10px;
+    border-color: thistle;
+    width: 400px;
+    height: 50px;
+    align-content: center;
+    justify-content: center;
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    border: 0.1em solid #303a47;
+    background: linear-gradient(
+        0deg,
+        #152846,
+        #161b22
+    );
+}
+
+.lab{
+    margin-top: 13px;
+    color:white;
+    font-size: 14px;
+    font-weight: lighter;
+
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #0d1117;
+    background-clip: padding-box;
+    border: 1px solid #232b37;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+#id_password2{
+    border: 1px solid #232b37;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+#id_password2:focus{
+    background-color: #0d1117;
+}
+
+#id_email{
+    border: 1px solid #232b37;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+#id_email:focus{
+    background-color: #0d1117;
+}
+
+#id_roll_number{
+    border: 1px solid #232b37;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+#id_roll_number:focus{
+    background-color: #0d1117;
+}
+
+#div_id_name{
+    margin-top: 20px;
+}
+
+#div_id_email{
+    margin-top: 20px;
+}
+
+#div_id_roll_number{
+    margin-top: 20px;
+    
+}
+
+
+

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>{{ code }} Webpage</h1>
+    Head Instructor for the Course is {{ head }}
+    <br>
+    <h2>Instructors</h2>
+    <ul>
+        {% for instructor in all_instructor %}
+        <li>{{ instructor }}</li>
+        {% endfor %}
+    </ul>
+    <br>
+    <h2>Students</h2>
+    <ul>
+        {% for student in all_students %}
+        <li>{{ student }}</li>
+        {% endfor %}
+    </ul>
+    You are head in this course
+</body>
+</html>
