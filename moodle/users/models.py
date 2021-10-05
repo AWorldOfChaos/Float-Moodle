@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 
 class Profile(models.Model):
     name = models.CharField(max_length=50)
-    roll_number = models.IntegerField()
+    roll_number = models.IntegerField(unique=True)
     email = models.EmailField()
     user = OneToOneField(User, on_delete=models.CASCADE, related_name="UserProfile")
 
@@ -52,9 +52,8 @@ class Instructor(models.Model):
 
 
 class Assignment(models.Model):
-    problem_statement = "To be added"
-    course = ForeignKey(Course, on_delete=models.CASCADE)
-    deadline = models.DateTimeField()
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    problem_statement = models.FileField(upload_to="assignments/", default=None)
     dictionary_of_marks = {}
 
     def upload_marks(self, marksDictionary):

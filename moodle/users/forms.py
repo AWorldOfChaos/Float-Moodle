@@ -1,3 +1,4 @@
+from users.models import Assignment
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -23,3 +24,15 @@ class CourseForm(ModelForm):
     class Meta:
         model = Course
         fields = ['course_code', 'course_name', 'join_code']
+
+class Assignmentform(forms.Form):
+    problem = forms.FileField(label="Select a File")
+
+class Removestudent(forms.Form):
+    roll_no = forms.IntegerField()
+
+class Removeinstructor(forms.Form):
+    roll_no = forms.IntegerField()
+
+class JoinCourse(forms.form):
+    course_code = forms.IntegerField()
