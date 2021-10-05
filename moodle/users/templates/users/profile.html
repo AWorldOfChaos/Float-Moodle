@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="style.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/c70797d3ad.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@500&display=swap" rel="stylesheet">
+    <title>profile</title>
+</head>
+
+<body style="background-color: #0d1117; display: block; position: relative;">
+
+    <header style="top:0px;">
+        <div class="navbar">
+            <a href="#home" style="padding-top: 20px; margin-right: 0; text-align: right; padding-right: 5px;"><i
+                    class="fas fa-book"></i></a>
+            <a href="#home" style="padding-top: 20px;margin-left:0px;text-align: left; padding-left: 5px;">Moodle</a>
+            <a href="#new course"><input type="text" class="input-code" placeholder="enter-course code"><i
+                    class="fas fa-sign-in-alt"></i></a>
+            <div class="dropdown" style="padding-top:15px;">
+                <button class="dropbtn"><i class="fas fa-user"></i>
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="#">Profile</a>
+                    <a href="#">Logout</a>
+                    <a href="#">Reset password</a>
+                </div>
+            </div>
+            <div class="dropdown" style="padding-top:15px;">
+                <button class="dropbtn"><i class="fas fa-plus"></i>
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="#">Link 1</a>
+                    <a href="#">Link 2</a>
+                    <a href="#">Link 3</a>
+                </div>
+            </div>
+            <div class="dropdown" style="padding-top:15px;">
+                <button class="dropbtn"><i class="fas fa-bell"></i>
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="#">Link 1</a>
+                    <a href="#">Link 2</a>
+                    <a href="#">Link 3</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div style="height: 68px;"></div>
+    <main style="display: flex; padding-right: 10%;">
+<!-- ************************************************************************************************* -->
+        <!-- section to write the profile details -->
+        <div class="personal-detail-section">
+            <!-- profile photo -->
+            <di style="width: 100%; height: fit-content;"><img src="poisson.png" alt="" class="profile"></di>
+            <!-- username -->
+            <div style="color:#c9d1d9; font-size: 30px;font-weight: 500;line-height: 1.25;">
+                <h1 style="font-weight: 600; font-size: 32px; margin-top: 0;margin-bottom: 0;">Nikhil Manjrekar</h1>
+            </div>
+            <!-- email-->
+            <div style="color:#c9d1d9; font-weight: 400;">
+                <h3 style="color:#b3b7bb; font-weight: 300; font-size: 19px;margin-top: 0;margin-bottom: 0;">
+                    200050088@iitb.ac.in</h3>
+            </div>
+            <!-- college name -->
+            <div>
+                <h3 style="color:#b3b7bb; font-weight: 400; font-size: 22px;margin-bottom: 0;">Indian Institute of
+                    Technology, Bombay</h3>
+            </div>
+            <div style="margin-top: 10px;">
+                <button class="btn2">Edit Profile</button>
+            </div>
+        </div>
+        
+        <div style="width: 100%; display: block; padding-top: 40px;">
+            <div>
+                <button class="tablink" onclick="openPage('Overview', this, '#0d1117')"><i class="fas fa-book-open" style="margin-right: 8px;"></i>Overview</button>
+                <button class="tablink" onclick="openPage('Course', this, '#0d1117')" id="defaultOpen"><i class="fas fa-book" style="margin-right: 8px;"></i>Courses</button>
+                <button class="tablink" onclick="openPage('Ta', this, '#0d1117')"><i class="far fa-user" style="margin-right: 8px;"></i>Ta</button>
+                <button class="tablink" onclick="openPage('About', this, '#0d1117')"><i class="far fa-address-card" style="margin-right: 8px;"></i>About</button>
+            </div>
+            <div id="Overview" class="tabcontent">
+                <h1>Overview</h1>
+                <p>Home is where the heart is..</p>
+            </div>
+
+            <div id="Course" class="tabcontent" >
+                <h1>Courses</h1>
+                <div style="display: flex;">
+                    <input type="text" id="filter-input" placeholder="Find the course">
+                    <div class="dropdown" style="margin:0">
+                        <button class="btn3">Filter By <i class="fas fa-caret-down"></i></button>
+                        <div class="dropdown-content">
+                            <a href="#" style="text-decoration: none; color:  #c9d1d9;">Link 1</a>
+                            <a href="#" style="text-decoration: none; color:  #c9d1d9;">Link 2</a>
+                            <a href="#" style="text-decoration: none; color:  #c9d1d9;">Link 3</a>
+                        </div>
+                    </div>
+                    <div class="dropdown" style="margin:0">
+                        <button class="btn3">Sort <i class="fas fa-caret-down"></i></button>
+                        <div class="dropdown-content">
+                            <a href="#" style="text-decoration: none; color:  #c9d1d9;">Link 1</a>
+                            <a href="#" style="text-decoration: none; color:  #c9d1d9;">Link 2</a>
+                            <a href="#" style="text-decoration: none; color:  #c9d1d9;">Link 3</a>
+                        </div>
+                    </div>
+                    <button class="btn" style="margin-top: 0; height: 40px; margin-left: 20px; width: fit-content;"><i class="fas fa-book" style="margin-right: 5px;"></i>Enter New Course</button>
+                </div>
+
+
+<!-- ****************************************************************************************************** -->
+                <!-- use this to write the course names -->
+                <ul style="list-style: none; padding-left: 0;font-size: 20px;">
+                    <li><a href="">CS215</a></li>
+                    <li><a href="">CS207</a></li>
+                    <li><a href="">CS213</a></li>
+                    <li><a href="">CS293</a></li>
+                    <li><a href="">CS251</a></li>
+                </ul>
+                
+            </div>
+
+            <div id="Ta" class="tabcontent">
+                <h1>uploads</h1>
+                <p>Get in touch, or swing by for a cup of coffee.
+
+                </p>
+            </div>
+
+            <div id="About" class="tabcontent">
+                <h1>About</h1>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia voluptates earum esse vel. Quod sequi illum aperiam consequuntur quo ad? Esse excepturi accusamus velit quasi facilis doloremque vitae vero, voluptatibus necessitatibus fugiat delectus illum laudantium veritatis. Voluptas fugit quidem illum quaerat sed rem ut assumenda? Neque quo aliquid rem quos fugiat in ipsa tempore. Enim animi saepe dolor recusandae eius sed, ipsum a sit quod ab ea illum voluptatum amet impedit harum voluptas perspiciatis optio, cumque eaque odio, sequi dolore. Nam molestias dignissimos voluptatum, ad optio modi nihil? Est sapiente, iste eos doloremque amet aliquam alias quaerat quasi quod, perferendis quis tenetur nam, quae ex suscipit excepturi vel quos enim! Eligendi ad reiciendis voluptatem ut nulla quisquam doloremque laboriosam iste architecto, distinctio necessitatibus doloribus? Porro vero vel ipsa blanditiis ab iure accusantium rem eaque, nesciunt cupiditate, sequi amet alias aperiam. Obcaecati totam delectus cumque voluptates in a, consequuntur, facere excepturi repellendus porro, provident quos quibusdam libero esse blanditiis fuga? Nesciunt id voluptates possimus vel fugit atque earum, deleniti delectus dolore quae praesentium itaque quidem minima iure illo alias quas tempora aspernatur vero, illum quam, ratione laborum modi. Odit quo aliquid omnis non, molestias nemo saepe, nobis velit placeat ab explicabo quas porro deleniti, ullam consectetur consequatur! Incidunt iure ipsa qui maiores libero voluptate molestiae error quos vel ut repudiandae, unde ullam recusandae suscipit vitae dolor magnam consectetur voluptatibus reprehenderit possimus quo. Quisquam, aut iure beatae atque a soluta unde debitis quidem at! Vel ipsum porro molestiae cumque, voluptate molestias veritatis repudiandae consequuntur minima tenetur similique quisquam, nemo facilis hic saepe laborum, iure officia. Sit, dolorum? Totam officiis magni inventore ipsa cupiditate adipisci obcaecati reprehenderit maiores ipsum excepturi tempora architecto cumque perferendis dolorem, sit pariatur enim rerum non praesentium sunt! Perferendis fugit laudantium dolorum voluptatum, qui dolorem nulla harum exercitationem rerum eius velit nisi officia excepturi quos assumenda, doloremque vitae aliquam vero impedit adipisci? Tempora quis, amet corrupti doloremque quidem neque consequatur ab eaque ut atque repellat ullam modi dolore laudantium nostrum expedita alias. Ipsum odio, ratione maxime asperiores praesentium deserunt, voluptate et aperiam, illo explicabo reprehenderit? Aperiam consequatur incidunt earum quaerat saepe sequi, et optio dolorem a at, labore dolores ipsam ducimus illum fuga quam amet! Numquam molestiae ipsum similique perspiciatis repudiandae quia incidunt culpa saepe nemo eos nostrum atque expedita fugit, ex amet soluta aperiam aliquid maiores blanditiis quaerat architecto, omnis provident! Molestiae eum hic voluptates soluta eius accusamus dignissimos quam iste corrupti consequatur, doloribus quas ducimus possimus quos architecto aliquid modi maiores omnis assumenda provident fugiat in? Est, officia beatae incidunt consequatur quod sunt ea provident reprehenderit harum corrupti, soluta aliquid nihil, fugiat facere id assumenda obcaecati vero optio magnam voluptates eligendi ad aliquam? Unde quia labore velit blanditiis numquam aliquam mollitia molestias natus fugiat? Autem fugiat architecto unde labore. At blanditiis exercitationem deleniti quas magnam velit dolorum nesciunt quis inventore maxime ut voluptas sint incidunt temporibus vitae saepe provident consequuntur quam enim, eos facere. Esse, illo, laborum labore neque dolorem libero amet eos, corrupti dolorum voluptatum quas reprehenderit repellendus? Fuga deleniti voluptatem eveniet modi eos libero sint? Labore veritatis laudantium provident adipisci, veniam vitae explicabo, quas molestias quidem perferendis quasi consequatur tempora corrupti odio, quod eveniet? Quia molestiae reprehenderit, perspiciatis maiores in praesentium consectetur hic mollitia deleniti nam atque quam maxime nostrum, eligendi quos obcaecati laudantium delectus quisquam impedit! Omnis velit labore praesentium est fugit dicta pariatur quaerat aspernatur tempora quo porro rerum eaque ratione delectus autem voluptatibus repellat officiis dolore, optio explicabo dignissimos blanditiis illo. Atque animi expedita, culpa ab cum eum vitae, perspiciatis quidem optio nobis, possimus dolore? Nemo aperiam impedit aut itaque dolores accusantium minus, temporibus sint! Nesciunt cumque ipsam illum reprehenderit sed quaerat ullam omnis architecto expedita! Placeat ex modi adipisci id. Ea eos voluptatem blanditiis, aperiam sequi iste necessitatibus? Aut quibusdam, minus ab voluptates nemo culpa, illum omnis consequatur porro nihil veritatis quod totam, et voluptatum itaque aliquam atque nobis praesentium temporibus autem quo nulla! In ipsam laboriosam maiores porro hic dolor aut voluptas accusantium dolore ad deleniti, nostrum necessitatibus perferendis neque ratione quos alias enim quasi eum sapiente, eaque fugit animi magnam asperiores. Debitis eligendi, et reprehenderit sapiente neque illum velit tenetur veniam, sequi tempore, porro necessitatibus cupiditate adipisci doloremque explicabo provident totam beatae ipsum quam maiores? Expedita inventore distinctio laudantium temporibus numquam consectetur perferendis totam accusamus, in iusto placeat porro eaque, enim id quibusdam quos quaerat fugiat odit, aliquam officia error sed alias soluta? Voluptatibus, unde quam numquam esse natus aut quidem minima, optio vero magni pariatur tempora illum amet quos culpa adipisci, vel deserunt repellat. Cum minus rem deserunt recusandae nam, odit dignissimos placeat voluptatem doloribus. Quos laborum, molestias consequuntur quam nemo consectetur nulla itaque cupiditate autem facilis tenetur atque assumenda modi enim porro neque, rerum consequatur delectus placeat? Dignissimos temporibus officia necessitatibus ex labore neque exercitationem laudantium ipsa perferendis, eligendi officiis dolor fuga voluptatem dolores atque distinctio, expedita nobis commodi perspiciatis dolorem quaerat omnis, maiores magnam voluptatum! Ullam tempore fugit sed vitae dicta totam, nisi laudantium modi impedit laboriosam dolores tempora consequuntur veritatis necessitatibus nulla voluptatem nemo! Quis, placeat quia? Fuga debitis a, quidem quo rerum reprehenderit aliquam veniam error consequatur saepe sed dolor nemo molestiae ex quaerat ut pariatur temporibus corporis. Quas ea alias accusantium minima magnam aut eius animi ullam vitae. Dignissimos voluptatem tempora eaque cum repudiandae quaerat ad itaque ratione placeat excepturi. Velit omnis modi laborum, rerum qui fugiat ipsam exercitationem voluptatem tempore placeat itaque quidem tempora minus odit consectetur, mollitia nemo quas quae ducimus cupiditate delectus quis. Neque quisquam praesentium incidunt repudiandae! Sit suscipit unde autem temporibus ut aperiam nobis at itaque accusamus, voluptates eaque quae beatae accusantium libero! Exercitationem explicabo asperiores soluta, harum tempora aliquid, dolorum quasi et assumenda voluptatem distinctio quia quisquam nesciunt quos provident itaque inventore enim adipisci? Laborum tempora esse illum eum ipsa nihil deleniti nisi dignissimos expedita! Rerum, quos dolores sequi mollitia, exercitationem distinctio voluptates possimus aut reprehenderit itaque, porro veritatis dolorem atque facere quidem aliquid sed dolorum quibusdam officia. Ullam voluptatum enim sapiente iste adipisci laudantium quam dolorum..</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function openPage(pageName, elmnt, color) {
+            // Hide all elements with class="tabcontent" by default */
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Remove the background color of all tablinks/buttons
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].style.borderBottomColor= "";
+            }
+
+            // Show the specific tab content
+            document.getElementById(pageName).style.display = "block";
+
+            // Add the specific color to the button used to open the tab content
+            elmnt.style.borderBottonWidth="3px";
+            elmnt.style.borderBottomColor = "#f78166";
+            
+        }
+
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+    </script>
+
+</body>
+
+</html>

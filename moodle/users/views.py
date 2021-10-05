@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, CourseForm
-from .models import Course, Profile, Assignment, Submission, Student, Instructor
+from .models import Course, Profile, Assignment, Submission, Student, Instructor, Invite
 from django.contrib.auth.models import User
 from django.views import View
 # Create your views here.
@@ -91,4 +91,52 @@ def join_course(request, course_code):
     profile = user.UserProfile
     student = Student(obj=profile, course=course)
     student.save()
+    return redirect('/courses/{}/'.format(course_code))
+
+
+@login_required(login_url="/login/")
+def invite(request, course_code):
+    course = Course.objects.get(course_code=course_code)
+    user = request.user
+    if user == course.head_instructor:
+        users = User.objects.all()
+        all_users = []
+        for curr_user in users:
+            all_users.append(curr_user.UserProfile)
+        return render(request, 'courses/invite_page.html', {'all_users': all_users})
+    else:
+        return redirect('/courses/{}/'.format(course_code))
+
+
+@login_required(login_url="/login/")
+def send_invite(request, course_code, profile_name):
+    course = Course.objects.get(course_code=course_code)
+    user = request.user
+    profile = Profile.objects.get(name=profile_name)
+    if user == course.head_instructor:
+        inv = Invite(course=course, profile=profile)
+        inv.save()
+    else:
+        return redirect('/courses/{}/'.format(course_code))
+
+
+@login_required(login_url="/login/")
+def invite_view(request):
+    user = request.user
+    invites = user.invite_set.all()
+    all_invites = []
+    for curr_invite in invites:
+        all_invites.append(curr_invite.course.course_code)
+    return render(request, 'users/invite_view.html', {'all_invites': all_invites})
+
+
+@login_required(login_url="/login/")
+def invite_accept(request, course_code):
+    course = Course.objects.get(course_code=course_code)
+    user = request.user
+    ins = Instructor(obj=user.UserProfile, course=course)
+    ins.save()
+    # Need to remove student user as required
+    # Need to delete invite from invite_list
+    # Need to implement feature to delete invite
     return redirect('/courses/{}/'.format(course_code))

@@ -1,4 +1,5 @@
 <!doctype html>
+{% load static %}
 <html lang="en">
 
 <head>
@@ -7,40 +8,70 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
-      {% load static %}
-  <link href="{% static 'users/style.css' %}"" rel="stylesheet">
+  {% load static %}
+  <link href="{% static 'users/style.css' %}" rel="stylesheet">
   <script src="https://kit.fontawesome.com/c70797d3ad.js" crossorigin="anonymous"></script>
-  <title>Dashboard</title>
+  <title>Document</title>
 </head>
 
 <body>
-{%load static%}
-  <div class="header">
-    <header>
-      <nav class="navbar">
-        <ul>
-          <li class="domain-name"> <i class="fas fa-book" style="margin-right: 10px; font-size: 20px;"></i> Moodle</li>
-        </ul>
-        <ul>
-          <div class="details">
-            <li><i class="fas fa-plus"></i></li>
-            <li><span style="font-size: 20px; color: white;">
-                <i class="fas fa-bell"></i>
-              </span></li>
-            <li><i class="fas fa-user" style="color: white;"></i></li>
-          </div>
-        </ul>
-      </nav>
-    </header>
-  </div>
+ {% load static %}
+  <header style="top:0px;">
+    <div class="navbar">
+      <a href="#home" style="padding-top: 20px;"><i class="fas fa-book"></i></a>
+      <a href="#home" style="padding-top: 20px;margin-left: 10px;">Moodle</a>
+      <a href="#new course"><input type="text" class="input-code" placeholder="enter-course code"><i class="fas fa-sign-in-alt"></i></a>
+      <div class="dropdown" style="padding-top:15px;">
+        <button class="dropbtn"><i class="fas fa-user"></i>
+          <i class="fa fa-caret-down"></i>
+        </button>     
+        <div class="dropdown-content" >
+          <a href="#">Profile</a>
+          <a href="{% url 'password_reset' %}">Reset password</a>
+          <a href="{% url 'logout' %}">Logout</a>
+        </div>
+      </div>
+      <div class="dropdown" style="padding-top:15px;">
+        <button class="dropbtn"><i class="fas fa-plus"></i>
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="{% url 'create_course' %}">Create Course</a>
+          <a href="#">Join Course</a>
+          <a href="{% url 'view_invites' %}">View Invites</a>
+        </div>
+      </div>
+      <div class="dropdown" style="padding-top:15px;">
+        <button class="dropbtn"><i class="fas fa-bell"></i>
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="#">Link 1</a>
+          <a href="#">Link 2</a>
+          <a href="#">Link 3</a>
+        </div>
+      </div>
+    </div>
+  </header>
   <div class="home-content">
     <div class="sidebar">
       <div style="padding: left 10px; display: flex;">
-        <h4>Courses</h4>
+        <h2>Courses</h2>
       </div>
       <hr>
+
+      <!-- ****************************************************************************************** -->
+                                        <!-- for sidebar content -->
+      <!-- ****************************************************************************************** -->
+      <!-- <div class="course-detail">
+        <div class="course-code">  
+          <i class="fas fa-graduation-cap" style="color:whitesmoke"></i> Home // write course code here
+        </div>
+        <div class="course-name"> // full name of the course
+          <p class="course-name">Data Analysis and Interpretation</p>
+        </div>
+      </div> -->
+
       <div class="course-detail">
         <div class="course-code">
           <i class="fas fa-house" style="color:whitesmoke"></i> Home
@@ -49,6 +80,7 @@
           <p class="course-name">Data Analysis and Interpretation</p>
         </div>
       </div>
+
       <div class="course-detail">
         <div class="course-code">
           <i class="fas fa-graduation-cap" style="margin-right: 5px;"></i> CS215
@@ -91,18 +123,55 @@
       </div>
       <hr style="margin-top: 40px; width: 70%; justify-content: center;">
     </div>
+    <div style="width: 100%;height: 100%; display: flex;">
     <div class="courses">
+
+      <!-- ****************************************************************************************** -->
+                                            <!-- for recent courses -->
+      <!-- ****************************************************************************************** -->
       <h1> Recent Activity</h1>
       <hr>
-      <div class="course-card">
-        <div class="course-name">CS215</div>
-
-        <hr>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, doloribus odio. Nostrum similique obcaecati,
-        dolor ullam, sapiente quidem reprehenderit eos provident libero exercitationem expedita harum, distinctio
-        veritatis quam fugit? Dolor voluptas est nostrum, veritatis aspernatur ea quos officiis consectetur repudiandae
-        nemo temporibus totam architecto quidem consequatur, incidunt error reprehenderit voluptate.
+      <div class="card" id="card">
+        <div class="card-header" id="card-header">
+          CS215
+        </div>
+        <div class="card-body" id="card-body">
+          <h3 class="card-title">Data Interpretation and Analysis</h3>
+          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
       </div>
+      <div class="card" id="card">
+        <div class="card-header" id="card-header">
+          CS215
+        </div>
+        <div class="card-body" id="card-body">
+          <h3 class="card-title">Data Interpretation and Analysis</h3>
+          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+          <div style="width: 100%; float: right;"><a href="#" class="btn btn-primary">Go somewhere</a></div>
+        </div>
+      </div>
+      <div class="card" id="card">
+        <div class="card-header" id="card-header">
+          CS215
+        </div>
+        <div class="card-body" id="card-body">
+          <h3 class="card-title">Data Interpretation and Analysis</h3>
+          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+      </div>
+      <div class="card" id="card">
+        <div class="card-header" id="card-header">
+          CS215
+        </div>
+        <div class="card-body" id="card-body">
+          <h3 class="card-title">Data Interpretation and Analysis</h3>
+          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+          <a href="#" class="btn">Go somewhere</a>
+        </div>
+      </div>
+      
       <div class="course-card">
         <div class="course-name">
           CS213
@@ -151,7 +220,7 @@
       </div>
       <hr>
       <div class="course-card">
-        <div class="course-name">Course Name</div>
+        <div class="course-name">Corse Name</div>
         <hr>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, doloribus odio. Nostrum similique obcaecati,
         dolor ullam, sapiente quidem reprehenderit eos provident libero exercitationem expedita harum, distinctio
@@ -160,7 +229,7 @@
       </div>
       <hr>
       <div class="course-card">
-        <div class="course-name">Course Name</div>
+        <div class="course-name">Corse Name</div>
         <hr>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, doloribus odio. Nostrum similique obcaecati,
         dolor ullam, sapiente quidem reprehenderit eos provident libero exercitationem expedita harum, distinctio
@@ -199,7 +268,11 @@
         reprehenderit repudiandae veritatis at laborum quibusdam laudantium atque excepturi a! Architecto libero earum
         eligendi fugit!
       </div>
+      <div class="events-this-week">
+        
+      </div>
     </div>
+  </div>
   </div>
 
 
@@ -218,9 +291,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
     -->
-<a href="{% url 'logout' %}">Logout</a>
-<a href="{% url 'password_reset' %}">Reset Password</a>
-<a href="{% url 'create_course' %}">New Course</a>
 </body>
 
 </html>

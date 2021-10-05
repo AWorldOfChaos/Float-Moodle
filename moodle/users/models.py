@@ -73,3 +73,11 @@ class Assignment(models.Model):
 class Submission(models.Model):
     assignment = ForeignKey(Assignment, on_delete=models.CASCADE)
     data = "this is my submission"
+
+
+class Invite(models.Model):
+    course = ForeignKey(Course, on_delete=models.CASCADE)
+    profile = ForeignKey(Profile, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.course

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>student-info</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="info.css">
+    <script src="https://kit.fontawesome.com/c70797d3ad.js" crossorigin="anonymous"></script>
+    <script>
+        function filter() {
+            var input, filter, table, tr, i, txtValue;
+            input = document.getElementById("filter-input");
+            filter = input.value.toUpperCase();
+            console.log(filter);
+            table = document.getElementById("data-table");
+            tr = table.getElementsByTagName("tr");
+
+            for (i = 0; i < tr.length; ++i) {
+                td = tr[i].getElementsByTagName("td")[0];
+
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+
+</head>
+
+<body>
+    <div>
+        <div class="header">
+            <header>
+                <nav class="navbar">
+                    <ul>
+                        <li class="domain-name"> <i class="fas fa-book" style="margin-right: 10px; font-size: 20px;"></i>
+                            Moodle</li>
+                        <li>
+                            <form method="POST">
+                                <div>
+                                    <input type="text" placeholder="enter-course code" class="input-code">
+                                    <i class="fas fa-sign-in-alt" style= "left: -30px; right: -60px;"></i>
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
+                    <ul>
+                        <div class="details">
+                            <li><i class="fas fa-plus"></i></li>
+                            <li><span style="font-size: 20px; color: white;">
+                                    <i class="fas fa-bell"></i>
+                                </span></li>
+                            <li><i class="fas fa-user" style="color: white;"></i></li>
+                        </div>
+                    </ul>
+                </nav>
+            </header>
+        </div>
+    </div>
+    <div class="home-content">
+        <div class="sidebar">
+          <div style="padding: left 10px; display: flex;">
+            <h4>Courses</h4>
+          </div>
+          <hr>
+    
+          <!-- ****************************************************************************************** -->
+                                            <!-- for sidebar content -->
+          <!-- ****************************************************************************************** -->
+          <!-- <div class="course-detail">
+            <div class="course-code">  
+              <i class="fas fa-graduation-cap" style="color:whitesmoke"></i> Home // write course code here
+            </div>
+            <div class="course-name"> // full name of the course
+              <p class="course-name">Data Analysis and Interpretation</p>
+            </div>
+          </div> -->
+    
+    
+    
+          <div class="course-detail">
+            <div class="course-code">
+              <i class="fas fa-house" style="color:whitesmoke"></i> Home
+            </div>
+            <div class="course-name">
+              <p class="course-name">Data Analysis and Interpretation</p>
+            </div>
+          </div>
+    
+          <div class="course-detail">
+            <div class="course-code">
+              <i class="fas fa-graduation-cap" style="margin-right: 5px;"></i> CS215
+            </div>
+            <div class="course-name">
+              <p class="course-name">Data Analysis and Interpretation</p>
+            </div>
+          </div>
+          <div class="course-detail">
+            <div class="course-code">
+              <i class="fas fa-graduation-cap" style="margin-right: 5px;"></i> CS213
+            </div>
+            <div class="course-name">
+              <p class="course-name">Data Analysis and Interpretation</p>
+            </div>
+          </div>
+          <div class="course-detail">
+            <div class="course-code">
+              <i class="fas fa-graduation-cap" style="margin-right: 5px;"></i> CS207
+            </div>
+            <div class="course-name">
+              <p class="course-name">Data Analysis and Interpretation</p>
+            </div>
+          </div>
+          <div class="course-detail">
+            <div class="course-code">
+              <i class="fas fa-graduation-cap" style="margin-right: 5px;"></i> CS251
+            </div>
+            <div class="course-name">
+              <p class="course-name">Data Analysis and Interpretation</p>
+            </div>
+          </div>
+          <div class="course-detail">
+            <div class="course-code">
+              <i class="fas fa-graduation-cap" style="margin-right: 5px;"></i> CS293
+            </div>
+            <div class="course-name">
+              <p class="course-name">Data Analysis and Interpretation</p>
+            </div>
+          </div>
+          <hr style="margin-top: 40px; width: 70%; justify-content: center;">
+        </div>
+    
+    <div style="width: 100%;height: 100%; display: block;">
+        <div class="d-flex justify-content-center" style="padding-top: 30px;" >
+            <input type="text" id="filter-input" onkeyup="filter()" placeholder="search by names">
+        </div>
+        <div class="participants-table">
+            <div class="d-flex justify-content-center">
+
+            <table id="data-table">
+                <tr>
+                    <th style="width: 40%;">Name</th>
+                    <th style="width: 30%;">position</th>
+                    <th style="width: 30%;">Last access</th>
+                </tr>
+                <tr>
+                    <td>Nikhil</td>
+                    <td>student</td>
+                    <td>123355</td>
+                </tr>
+                <tr>
+                    <td>pinkesh</td>
+                    <td>student</td>
+                    <td>4545454</td>
+                </tr>
+                <tr>
+                    <td>kartik</td>
+                    <td>teacher</td>
+                    <td>465445</td>
+                </tr>
+                <tr>
+                    <td>Moiz</td>
+                    <td>student</td>
+                    <td>464664</td>
+                </tr>
+                <tr>
+                    <td>hello</td>
+                    <td>student</td>
+                    <td>114222</td>
+                </tr>
+            </table>
+        </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
