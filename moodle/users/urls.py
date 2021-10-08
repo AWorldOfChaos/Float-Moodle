@@ -30,6 +30,7 @@ urlpatterns = [
          name='password_reset_complete'),
     path('about/', views.about),
     path('create/', views.course_create, name='create_course'),
-    path('courses/<str:course_code>/', views.course_view),
-    path('join/<str:course_code>/', views.join_course)
+    path('courses/<str:course_code>/', views.course_view, name= 'course_view'),
+    path('join/<str:course_code>/', views.join_course),
+    path('courses/<str:course_code>/assignments/<int:assignment_id>', views.assignments, name='assignments')
 ]

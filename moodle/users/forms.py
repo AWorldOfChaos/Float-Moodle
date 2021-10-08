@@ -26,6 +26,7 @@ class CourseForm(ModelForm):
         fields = ['course_code', 'course_name', 'join_code']
 
 class Assignmentform(forms.Form):
+    name = forms.CharField()
     problem = forms.FileField(label="Select a File")
 
 class Removestudent(forms.Form):
@@ -34,5 +35,8 @@ class Removestudent(forms.Form):
 class Removeinstructor(forms.Form):
     roll_no = forms.IntegerField()
 
-class JoinCourse(forms.form):
-    course_code = forms.IntegerField()
+class SubmissionForm(forms.Form):
+    solution = forms.FileField(label= "Select a File")
+
+class Feedback(forms.Form):
+    feedback = forms.Textarea()

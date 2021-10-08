@@ -1,0 +1,44 @@
+
+{% load crispy_forms_tags %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>login</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/c70797d3ad.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="{% static 'users/login.css' %}">
+</head>
+<body>
+    
+    <div style="width:100%;text-align:center; margin-bottom: 30px;"><i class="fas fa-book" style="font-size: 40px; "></i></div>
+    <p style="color: white; text-align: center; font-size: 25px; font-weight: 300; margin-bottom: 30px;">Submission</p>
+    <div class="d-flex justify-content-center">
+        <div class="form">
+                {% load crispy_forms_tags %}
+                <form method="POST" enctype="multipart/form-data" name="assignment_form">
+                        {% csrf_token %}
+                        {{ submissionForm|crispy }} 
+                        <button type="submit" class="submit" name="submission">Add Submission</button>    
+                </form>
+        </div>
+    </div>
+    <div style="width:100%;text-align:center; margin-bottom: 30px;"><i class="fas fa-book" style="font-size: 40px; "></i></div>
+    <p style="color: white; text-align: center; font-size: 25px; font-weight: 300; margin-bottom: 30px;">Feedback</p>
+    <div class="d-flex justify-content-center">
+        <div class="form">
+                {% load crispy_forms_tags %}
+                <form method="POST" name="remove_student_form">
+                        {% csrf_token %}
+                        {{ remove_student_form|crispy }} 
+                        <button type="submit" class="submit" name="feedback">Add a feedback</button>    
+                </form>
+        </div>
+    </div>
+</body>
+</html>
