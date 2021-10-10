@@ -536,3 +536,35 @@ hr {
     background-color: #343b46;
     border: 1px solid #f0f6fc1a;
 }
+
+.main-content{
+    display: block;
+    align-content: center;
+    justify-content: center;
+    padding-top: 100px;
+}
+
+
+.participants-table{
+    float: right;
+    display: block;
+    margin-top: 100px;
+    width: 100%;
+    font-size: 19px;
+    padding-left: 250px;
+    padding-right: 250px;
+    
+}
+#data-table{
+    background-color: #0d1117;
+    width: 100%;
+}
+
+#data-table th{
+    text-align: left;
+}
+
+#data-table tr:hover{
+    
+}
+

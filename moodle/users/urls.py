@@ -31,9 +31,10 @@ urlpatterns = [
     path('about/', views.about),
     path('create/', views.course_create, name='create_course'),
     path('courses/<str:course_code>/', views.course_view),
-    path('join/<str:course_code>/', views.join_course),
+    # path('join/<str:course_code>/', views.join_course),
     path('courses/<str:course_code>/invite/', views.invite),
     path('courses/<str:course_code>/invite/<str:profile_name>', views.send_invite),
     path('invites/', views.invite_view, name='view_invites'),
-    path('invites/<str:course_code>/', views.invite_accept)
+    path('invites/<str:course_code>/', views.invite_accept),
+    path('courses/<str:course_code>/assignments/<int:assignment_id>', views.assignments, name='assignments')
 ]

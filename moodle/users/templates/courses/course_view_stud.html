@@ -21,6 +21,11 @@
         <li>{{ student }}</li>
         {% endfor %}
     </ul>
-    You are student in this course
+    You are student in this course.
+
+    <h3> List of assignments </h3>
+    {% for assignment in assignments %}
+        <a href = "assignments/{{assignment.id}}">{{assignment.name}}</a>
+    {% endfor %}
 </body>
 </html>

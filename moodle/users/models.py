@@ -51,10 +51,14 @@ class Instructor(models.Model):
         return self.obj.name
 
 
+def upload_path(instance, filename):
+    return "{}/assignments/{}".format(instance.course.course_code, filename)
+
+
 class Assignment(models.Model):
-    problem_statement = "To be added"
-    course = ForeignKey(Course, on_delete=models.CASCADE)
-    deadline = models.DateTimeField()
+    name = models.CharField(max_length=50, unique=True, default="No name")
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    problem_statement = models.FileField(upload_to=upload_path, default=None)
     dictionary_of_marks = {}
 
     def upload_marks(self, marksDictionary):
@@ -70,9 +74,20 @@ class Assignment(models.Model):
         pass
 
 
+def submission_path(instance, filename):
+    return "{}/submissions/{}/{}".format(instance.assignment.course.course_code, instance.assignment.name, filename)
+
+
 class Submission(models.Model):
+    student = ForeignKey(Student, on_delete=models.CASCADE, default=None)
     assignment = ForeignKey(Assignment, on_delete=models.CASCADE)
-    data = "this is my submission"
+    submittedFile = models.FileField(upload_to=submission_path, default=None)
+
+
+class FeedbackModel(models.Model):
+    student = ForeignKey(Student, on_delete= models.CASCADE, default= None)
+    assignment = ForeignKey(Assignment, on_delete=models.CASCADE)
+    feedback = models.TextField(default="")
 
 
 class Invite(models.Model):

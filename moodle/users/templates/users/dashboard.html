@@ -20,7 +20,7 @@
     <div class="navbar">
       <a href="#home" style="padding-top: 20px;"><i class="fas fa-book"></i></a>
       <a href="#home" style="padding-top: 20px;margin-left: 10px;">Moodle</a>
-      <a href="#new course"><input type="text" class="input-code" placeholder="enter-course code"><i class="fas fa-sign-in-alt"></i></a>
+      <a href="#new course"><form method="post">{% csrf_token %}<input type="text" class="input-code" name='join_code' placeholder="enter-course code"><button type="submit" style="margin:0;padding:0;"><i class="fas fa-sign-in-alt"></i></button></form></a>
       <div class="dropdown" style="padding-top:15px;">
         <button class="dropbtn"><i class="fas fa-user"></i>
           <i class="fa fa-caret-down"></i>
@@ -71,7 +71,7 @@
           <p class="course-name">Data Analysis and Interpretation</p>
         </div>
       </div> -->
-
+<!--
       <div class="course-detail">
         <div class="course-code">
           <i class="fas fa-house" style="color:whitesmoke"></i> Home
@@ -121,26 +121,58 @@
           <p class="course-name">Data Analysis and Interpretation</p>
         </div>
       </div>
+-->
       <hr style="margin-top: 40px; width: 70%; justify-content: center;">
     </div>
     <div style="width: 100%;height: 100%; display: flex;">
     <div class="courses">
-
       <!-- ****************************************************************************************** -->
                                             <!-- for recent courses -->
       <!-- ****************************************************************************************** -->
-      <h1> Recent Activity</h1>
+      <h1> Your Courses</h1>
       <hr>
+      {% for course in all_head_courses %}
       <div class="card" id="card">
         <div class="card-header" id="card-header">
-          CS215
+          {{course.course_code}}
         </div>
         <div class="card-body" id="card-body">
-          <h3 class="card-title">Data Interpretation and Analysis</h3>
-          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
+          <h3 class="card-title">{{course.course_name}}</h3>
+          <p class="card-text">Role: Head Instructor</p>
+          <a href="/courses/{{course.course_code}}/" class="btn btn-primary">Go to course</a>
         </div>
       </div>
+      {% endfor %}
+
+      {% for course in all_instructor_courses %}
+      <div class="card" id="card">
+        <div class="card-header" id="card-header">
+          {{course.course_code}}
+        </div>
+        <div class="card-body" id="card-body">
+          <h3 class="card-title">{{course.course_name}}</h3>
+          <p class="card-text">Role: Instructor</p>
+          <p class="card-text">Head Instructor: {{course.head_instructor.UserProfile}}</p>
+          <a href="/courses/{{course.course_code}}/" class="btn btn-primary">Go to course</a>
+        </div>
+      </div>
+      {% endfor %}
+
+
+      {% for course in all_student_courses %}
+      <div class="card" id="card">
+        <div class="card-header" id="card-header">
+          {{course.course_code}}
+        </div>
+        <div class="card-body" id="card-body">
+          <h3 class="card-title">{{course.course_name}}</h3>
+          <p class="card-text">Role: Student</p>
+          <p class="card-text">Head Instructor: {{course.head_instructor.UserProfile}}</p>
+          <a href="/courses/{{course.course_code}}/" class="btn btn-primary">Go to course</a>
+        </div>
+      </div>
+      {% endfor %}
+<!--
       <div class="card" id="card">
         <div class="card-header" id="card-header">
           CS215
@@ -171,7 +203,8 @@
           <a href="#" class="btn">Go somewhere</a>
         </div>
       </div>
-      
+-->
+<!--
       <div class="course-card">
         <div class="course-name">
           CS213
@@ -276,7 +309,7 @@
   </div>
 
 
-
+-->
 
 
   <!-- Optional JavaScript; choose one of the two! -->

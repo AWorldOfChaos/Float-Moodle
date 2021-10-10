@@ -1,10 +1,248 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <title>Title</title>
-</head>
-<body>
+    <link rel="stylesheet" href="{% static 'users/style.css' %}">
+    <script src="https://kit.fontawesome.com/c70797d3ad.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@500&display=swap" rel="stylesheet">
+    <script>
+        function filter() {
+            var input, filter, table, tr, i, txtValue;
+            input = document.getElementById("filter-input");
+            filter = input.value.toUpperCase();
+            console.log(filter);
+            table = document.getElementById("data-table");
+            tr = table.getElementsByTagName("tr");
 
+            for (i = 0; i < tr.length; ++i) {
+                td = tr[i].getElementsByTagName("td")[0];
+
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+        function sortTableAsc() {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("data-table");
+            switching = true;
+            /* Make a loop that will continue until
+            no switching has been done: */
+            while (switching) {
+                // Start by saying: no switching is done:
+                switching = false;
+                rows = table.rows;
+                /* Loop through all table rows (except the
+                first, which contains table headers): */
+                for (i = 1; i < (rows.length - 1); i++) {
+                    // Start by saying there should be no switching:
+                    shouldSwitch = false;
+                    /* Get the two elements you want to compare,
+                    one from current row and one from the next: */
+                    x = rows[i].getElementsByTagName("td")[0];
+                    y = rows[i + 1].getElementsByTagName("td")[0];
+                    // Check if the two rows should switch place:
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    /* If a switch has been marked, make the switch
+                    and mark that a switch has been done: */
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+        function sortTableDesc() {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("data-table");
+            switching = true;
+            /* Make a loop that will continue until
+            no switching has been done: */
+            while (switching) {
+                // Start by saying: no switching is done:
+                switching = false;
+                rows = table.rows;
+                /* Loop through all table rows (except the
+                first, which contains table headers): */
+                for (i = 1; i < (rows.length - 1); i++) {
+                    // Start by saying there should be no switching:
+                    shouldSwitch = false;
+                    /* Get the two elements you want to compare,
+                    one from current row and one from the next: */
+                    x = rows[i].getElementsByTagName("td")[0];
+                    y = rows[i + 1].getElementsByTagName("td")[0];
+                    // Check if the two rows should switch place:
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    /* If a switch has been marked, make the switch
+                    and mark that a switch has been done: */
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+
+        function filterByPos(pos){
+            var table, txtValue;
+            table=document.getElementById("data-table");
+            tr=table.getElementsByTagName("tr");
+            for(i=0; i<tr.length;++i){
+                if (pos=="student"){
+                    td=tr[i].getElementsByTagName("td")[1];
+
+                    if (td.textContent==="student"){
+                        continue;
+                    }
+                    else{
+                        tr[i].style.display="";
+                    }
+                }
+                else if (pos=="teacher"){
+                    td=tr[i].getElementsByTagName("td")[1];
+                    if (td.textContent==="teacher"){
+                        continue;
+                    }
+                    else{
+                        tr[i].style.display="";
+                    }
+                }
+            }
+        }
+    </script>
+
+</head>
+
+<body style="background-color: #0d1117; display: block; position: relative;">
+{% load static %}
+    <header style="top:0px;">
+        <div class="navbar">
+            <a href="#home" style="padding-top: 20px; margin-right: 0; text-align: right; padding-right: 5px;"><i
+                    class="fas fa-book"></i></a>
+            <a href="#home" style="padding-top: 20px;margin-left:0px;text-align: left; padding-left: 5px;">Moodle</a>
+            <a href="#new course"><input type="text" class="input-code" placeholder="enter-course code"><i
+                    class="fas fa-sign-in-alt"></i></a>
+            <div class="dropdown" style="padding-top:15px;">
+                <button class="dropbtn"><i class="fas fa-user"></i>
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="#">Profile</a>
+                    <a href="#">Logout</a>
+                    <a href="#">Reset password</a>
+                </div>
+            </div>
+            <div class="dropdown" style="padding-top:15px;">
+                <button class="dropbtn"><i class="fas fa-plus"></i>
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="#">Link 1</a>
+                    <a href="#">Link 2</a>
+                    <a href="#">Link 3</a>
+                </div>
+            </div>
+            <div class="dropdown" style="padding-top:15px;">
+                <button class="dropbtn"><i class="fas fa-bell"></i>
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="#">Link 1</a>
+                    <a href="#">Link 2</a>
+                    <a href="#">Link 3</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div style="height: 68px;"></div>
+    <main>
+        <div style="display:block;padding-top: 30px;">
+            <div style="display: flex;justify-content: center;">
+                <input type="text" id="filter-input" onkeyup="filter()" placeholder="Find Student">
+                <div class="dropdown" style="margin:0">
+                    <button class="btn3">Filter By <i class="fas fa-caret-down"></i></button>
+                    <div class="dropdown-content">
+                        <a href="#" style="text-decoration: none; color:  #c9d1d9;">position</a>
+                        <a onclick="filterByPos('student')" href="#" style="text-decoration: none; color:  #c9d1d9;">student</a>
+                        <a onclick="filterByPos('teacher')" href="#" style="text-decoration: none; color:  #c9d1d9;">teacher</a>
+                    </div>
+                </div>
+                <div class="dropdown" style="margin:0">
+                    <button class="btn3">Sort <i class="fas fa-caret-down"></i></button>
+                    <div class="dropdown-content">
+                        <a onclick="sortTableAsc()" href="#" style="text-decoration: none; color:  #c9d1d9;">Ascending</a>
+                        <a onclick="sortTableDesc()" href="#" style="text-decoration: none; color:  #c9d1d9;">Descending</a>
+                    </div>
+                </div>
+                <button class="btn" style="margin-top: 0; height: 40px; margin-left: 20px; width: fit-content;">Send
+                    Invite</button>
+
+            </div>
+            <div class="participants-table">
+                <div style="display: flex; justify-content: center;">
+
+                    <table id="data-table">
+                        <tr>
+                            <th style="width: 35%;">Name</th>
+                            <th style="width: 25%;">position</th>
+                            <th style="width: 25%;">Last access</th>
+                            <th style="width: 15%;">Send Invite</th>
+                        </tr>
+                        <tr>
+                            <td>Nikhil</td>
+                            <td>student</td>
+                            <td>123355</td>
+                            <td><button class="btn" style="margin:0"><i class="fas fa-plus">Add</i></button></td>
+                        </tr>
+                        <tr>
+                            <td>pinkesh</td>
+                            <td>student</td>
+                            <td>4545454</td>
+                            <td><button class="btn" style="margin:0"><i class="fas fa-plus">Add</i></button></td>
+
+                        </tr>
+                        <tr>
+                            <td>kartik</td>
+                            <td>teacher</td>
+                            <td>465445</td>
+                            <td><button class="btn" style="margin:0"><i class="fas fa-plus">Add</i></button></td>
+                        </tr>
+                        <tr>
+                            <td>Moiz</td>
+                            <td>student</td>
+                            <td>464664</td>
+                            <td><button class="btn" style="margin:0"><i class="fas fa-plus">Add</i></button></td>
+                        </tr>
+                        <tr>
+                            <td>hello</td>
+                            <td>student</td>
+                            <td>114222</td>
+                            <td><button class="btn" style="margin:0"><i class="fas fa-plus">Add</i></button></td>
+
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
 </body>
+
 </html>
