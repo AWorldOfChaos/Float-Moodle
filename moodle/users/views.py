@@ -6,6 +6,8 @@ from .forms import UserRegisterForm, CourseForm, Assignmentform, Removeinstructo
 from .models import Course, Profile, Assignment, Submission, Student, Instructor, Invite, FeedbackModel
 from django.contrib.auth.models import User
 from django.views import View
+from django.conf import settings
+import os
 # Create your views here.
 
 
@@ -98,36 +100,39 @@ def course_create(request):
 
 @login_required
 def assignments(request, course_code, assignment_id):
-    assignment = Assignment.objects.get(id=assignment_id)
     course = Course.objects.get(course_code=course_code)
     profile = request.user.UserProfile
+    stud2 = profile.student_set.filter(course=course)
+    ins2 = profile.instructor_set.filter(course=course)
+    head_instructor = course.head_instructor
+    headProfile = head_instructor.UserProfile
+    students = course.student_set.all()
+    instructors = course.instructor_set.all()
+    assignment = Assignment.objects.get(id=assignment_id)
     form1 = SubmissionForm()
     form2 = Feedback()
-    if request.method == "POST":
-        if "submission" in request.POST:
-            form = SubmissionForm(request.POST, request.FILES)
-            if form.is_valid():
-                submission = Submission(student=Student.objects.get(obj=profile, course=course), assignment=assignment,
-                                        submittedFile=request.FILES['solution'])
-                submission.save()
-                return redirect('/courses/{}/'.format(course_code))
-            form1 = SubmissionForm
-            form2 = Feedback()
-            return render(request, 'assignments/assignment_view.html', {'submissionForm': form1, 'feedbackForm': form2})
+    if stud2:
+        filename = assignment.problem_statement.name.split('/')[-1]
+        filePath = settings.MEDIA_URL + course_code + "/assignments/" + filename
+        if request.method == "POST":
+            if "submission" in request.POST:
+                form = SubmissionForm(request.POST, request.FILES)
+                if form.is_valid():
+                    submission = Submission(student=Student.objects.get(obj=profile, course=course), assignment=assignment,
+                                            submittedFile=request.FILES['solution'])
+                    submission.save()
+                    return redirect('/courses/{}/'.format(course_code))
+                form1 = SubmissionForm
+                return render(request, 'assignments/assignment_view.html', {'submissionForm': form1, 'filePath':filePath})
 
-        if "feedback" in request.POST:
-            form = Feedback(request.POST)
-            if form.is_valid():
-                feedback = FeedbackModel(feedback=request.POST['feedback'],
-                                         student=Student.objects.get(obj=profile, course=course), assignment=assignment)
-                feedback.save()
+        return render(request, 'assignments/assignment_view.html', {'submissionForm': form1, 'filePath':filePath})
 
-                return redirect('/courses/{}/'.format(course_code))
-            form1 = SubmissionForm
-            form2 = Feedback()
-            return render(request, 'assignments/assignment_view.html', {'submissionForm': form1, 'feedbackForm': form2})
+    elif request.user == head_instructor:
+        submissions = assignment.submission_set.all()
+        filePath = settings.MEDIA_URL + course_code + "/submissions/" + assignment.name
+            
 
-    return render(request, 'assignments/assignment_view.html', {'submissionForm': form1, 'feedbackForm': form2})
+        return render(request, 'assignments/head_instructors_view.html', {"submissions":submissions, "path":filePath})
 
 
 @login_required(login_url="/login/")
@@ -163,7 +168,8 @@ def course_view(request, course_code):
                                                                          'all_instructors': instructors,
                                                                          'assignment_form': form1,
                                                                          "remove_student_form": form3,
-                                                                         "remove_instructor_form": form2})
+                                                                         "remove_instructor_form": form2,
+                                                                         'assignments': course.assignment_set.all()})
 
             elif "remove_student_form" in request.POST:
                 form = Removestudent(request.POST)
@@ -181,7 +187,8 @@ def course_view(request, course_code):
                                                                          'all_instructors': instructors,
                                                                          'assignment_form': form1,
                                                                          "remove_student_form": form3,
-                                                                         "remove_instructor_form": form2})
+                                                                         "remove_instructor_form": form2,
+                                                                         'assignments': course.assignment_set.all()})
 
             elif "remove_instructor_form" in request.POST:
                 form = Removeinstructor(request.POST)
@@ -199,7 +206,8 @@ def course_view(request, course_code):
                                                                          'all_instructors': instructors,
                                                                          'assignment_form': form1,
                                                                          "remove_student_form": form3,
-                                                                         "remove_instructor_form": form2})
+                                                                         "remove_instructor_form": form2,
+                                                                         'assignments': course.assignment_set.all()})
 
             form1 = Assignmentform()
             form2 = Removeinstructor()
@@ -210,7 +218,8 @@ def course_view(request, course_code):
                                                                  'all_instructors': instructors,
                                                                  'assignment_form': form1,
                                                                  "remove_student_form": form3,
-                                                                 "remove_instructor_form": form2})
+                                                                 "remove_instructor_form": form2,
+                                                                 'assignments': course.assignment_set.all()})
     elif stud2:
 
         return render(request, 'courses/course_view_stud.html', {'code': course_code, 'head': profile.name,

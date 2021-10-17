@@ -31,6 +31,14 @@
         {% endfor %}
     </ul>
     You are head in this course
+
+    <h3> List of assignments </h3>
+    <ul>
+    {% for assignment in assignments %}
+        <li><a href = "assignments/{{assignment.id}}">{{assignment.name}}</a></li>
+    {% endfor %}
+    </ul>
+    
     <div style="width:100%;text-align:center; margin-bottom: 30px;"><i class="fas fa-book" style="font-size: 40px; "></i></div>
     <p style="color: white; text-align: center; font-size: 25px; font-weight: 300; margin-bottom: 30px;">Add an Assignment</p>
     <div class="d-flex justify-content-center">

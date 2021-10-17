@@ -24,8 +24,10 @@
     You are student in this course.
 
     <h3> List of assignments </h3>
+    <ul>
     {% for assignment in assignments %}
-        <a href = "assignments/{{assignment.id}}">{{assignment.name}}</a>
+        <li><a href = "assignments/{{assignment.id}}">{{assignment.name}}</a></li>
     {% endfor %}
+    </ul>
 </body>
 </html>

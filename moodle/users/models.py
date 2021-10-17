@@ -77,7 +77,6 @@ class Assignment(models.Model):
 def submission_path(instance, filename):
     return "{}/submissions/{}/{}".format(instance.assignment.course.course_code, instance.assignment.name, filename)
 
-
 class Submission(models.Model):
     student = ForeignKey(Student, on_delete=models.CASCADE, default=None)
     assignment = ForeignKey(Assignment, on_delete=models.CASCADE)

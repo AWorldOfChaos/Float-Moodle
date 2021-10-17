@@ -13,6 +13,7 @@
 </head>
 <body>
 
+    <a href="{{filePath}}" download>Download assignment</a>
     <div style="width:100%;text-align:center; margin-bottom: 30px;"><i class="fas fa-book" style="font-size: 40px; "></i></div>
     <p style="color: white; text-align: center; font-size: 25px; font-weight: 300; margin-bottom: 30px;">Submission</p>
     <div class="d-flex justify-content-center">
@@ -22,18 +23,6 @@
                         {% csrf_token %}
                         {{ submissionForm|crispy }}
                         <button type="submit" class="submit" name="submission">Add Submission</button>
-                </form>
-        </div>
-    </div>
-    <div style="width:100%;text-align:center; margin-bottom: 30px;"><i class="fas fa-book" style="font-size: 40px; "></i></div>
-    <p style="color: white; text-align: center; font-size: 25px; font-weight: 300; margin-bottom: 30px;">Feedback</p>
-    <div class="d-flex justify-content-center">
-        <div class="form">
-                {% load crispy_forms_tags %}
-                <form method="POST" name="remove_student_form">
-                        {% csrf_token %}
-                        {{ remove_student_form|crispy }}
-                        <button type="submit" class="submit" name="feedback">Add a feedback</button>
                 </form>
         </div>
     </div>

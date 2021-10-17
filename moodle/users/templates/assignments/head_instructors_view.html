@@ -1,0 +1,5 @@
+<ul>
+{% for submission in submissions %}
+<li>{{submission.student.obj.roll_number}} ---> <a href="/media/{{submission.submittedFile.name}}" download>download</a></li>
+{% endfor %}
+</ul>
