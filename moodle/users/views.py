@@ -3,11 +3,12 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, CourseForm, Assignmentform, Removeinstructor, Removestudent, SubmissionForm,\
                    Feedback
-from .models import Course, Profile, Assignment, Submission, Student, Instructor, Invite, FeedbackModel
+from .models import Course, Profile, Assignment, Submission, Student, Instructor, Invite, FeedbackModel, Evaluation
 from django.contrib.auth.models import User
 from django.views import View
 from django.conf import settings
 import os
+from django.core.files.storage import FileSystemStorage
 # Create your views here.
 
 
@@ -114,6 +115,13 @@ def assignments(request, course_code, assignment_id):
     if stud2:
         filename = assignment.problem_statement.name.split('/')[-1]
         filePath = settings.MEDIA_URL + course_code + "/assignments/" + filename
+        if assignment.graded:
+            submission_instance = assignment.submission_set.get(student= stud2[0])
+            marks = submission_instance.marks
+            marks = "You got " + str(marks) + " marks."
+        else:
+            marks = "not graded yet"
+
         if request.method == "POST":
             if "submission" in request.POST:
                 form = SubmissionForm(request.POST, request.FILES)
@@ -125,14 +133,21 @@ def assignments(request, course_code, assignment_id):
                 form1 = SubmissionForm
                 return render(request, 'assignments/assignment_view.html', {'submissionForm': form1, 'filePath':filePath})
 
-        return render(request, 'assignments/assignment_view.html', {'submissionForm': form1, 'filePath':filePath})
+        return render(request, 'assignments/assignment_view.html', {'submissionForm': form1, 'filePath':filePath, 'marks':marks})
 
     elif request.user == head_instructor:
         submissions = assignment.submission_set.all()
-        filePath = settings.MEDIA_URL + course_code + "/submissions/" + assignment.name
-            
+        if request.method == "POST":
+            form = Feedback(request.POST, request.FILES)
+            if form.is_valid():
+                csv_file = request.FILES['feedback']
+                evaluation = Evaluation(assignment=assignment, csv_file=csv_file)
+                evaluation.save()
+                evaluation.evaluate()
+                return redirect('/courses/{}/'.format(course_code)) 
+            form2 = Feedback()
 
-        return render(request, 'assignments/head_instructors_view.html', {"submissions":submissions, "path":filePath})
+        return render(request, 'assignments/head_instructors_view.html', {"submissions":submissions, "feedbackForm":form2})
 
 
 @login_required(login_url="/login/")

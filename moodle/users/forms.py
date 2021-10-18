@@ -44,4 +44,4 @@ class SubmissionForm(forms.Form):
 
 
 class Feedback(forms.Form):
-    feedback = forms.Textarea()
+    feedback = forms.FileField(label="Select a csv file")
