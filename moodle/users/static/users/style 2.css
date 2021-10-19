@@ -1,0 +1,758 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+*{
+    box-sizing: border-box;
+}
+
+/* #686868 -thumb */
+/* #424242-track */
+
+html{
+    height: 100%;
+    
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #424242; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #686868; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #8b8b8b; 
+}
+
+body{
+    letter-spacing: -1pt !important;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #c9d1d9;
+    background-color:#010409;
+    display: block;
+    height: 100%;
+    width: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    overflow-y: scroll;
+    margin:0px;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 20; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+  }
+  
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #0d1117;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #30363d;
+    width: 35%; /* Could be more or less, depending on screen size */
+    border-radius: 6px;
+  }
+
+  
+  .modal-head{
+      width: 100%;
+      display: flex;
+      border-bottom: 1px solid #30363d;
+  }
+
+  .modal-head p{
+      font-size: 20px;
+      width: 100%;
+      margin-top: 12px;
+  }
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: rgb(148, 144, 144);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .invites{
+      padding-top: 10px;
+      padding-bottom: 10px;
+      display: flex;
+  }
+
+  .invite-head{
+      font-size: 16px;
+      display: flex;
+  }
+
+  .invite-head span.accept{
+      margin-right: 10px;
+      cursor: pointer;
+  }
+
+  .invite-head span.accept:hover{
+      color: green;
+  }
+  .invite-head span.decline{
+    margin-right: 10px;
+    cursor: pointer;
+}
+.invite-head span.decline:hover{
+    color:red;
+}
+  .invite-content{
+        width: 100%;
+      display: block;
+      padding-right: 20px;
+  }
+
+  .invite-content p{
+      width: 100%;
+      margin-top: 0px;
+      margin-bottom: 5px;
+      color:#838991;
+  }
+
+  .invite-head .course-code{
+    font-family: 'Lato', sans-serif;
+    font-size: 18px;
+    padding-top: 0;
+    color: #c9d1d9;
+    width: auto;
+  }
+  .invite-head .course-name{
+    font-size: 16px;
+    width: 100%;
+    color: #838991;
+  }
+/* Navbar container */
+.navbar {
+    overflow: hidden;
+    background-color: #161b22;
+    font-family: Arial;
+    z-index: 8;
+    font-size: 18px;
+    font-weight: 600;
+    padding-right: 100px;
+    position: relative;
+    width: 100%;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+
+  }
+  
+  /* Links inside the navbar */
+  .navbar a {
+    float: left;
+    font-size: 16px;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  
+  /* The dropdown container */
+  .dropdown {
+    float: right;
+    overflow: hidden;
+    z-index: 10;
+    
+  }
+  
+  /* Dropdown button */
+  .dropdown .dropbtn {
+    cursor: pointer;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit; /* Important for vertical align on mobile phones */
+    margin: 0; /* Important for vertical align on mobile phones */
+  }
+  
+  /* Add a red background color to navbar links on hover */
+  
+  /* Dropdown content (hidden by default) */
+  .dropdown-content {
+    display: none;
+    position: fixed;
+    background-color: #161b22;
+    color: white;
+    border-radius: 4px;
+    border: 1px solid #303a47;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 3;
+  }
+  
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    float: none;
+    font-weight: 300;
+    color: #8b949e;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+  }
+  
+  /* Add a grey background color to dropdown links on hover */
+  .dropdown-content a:hover {
+    background-color: #58a6ff;
+    color:white
+  }
+  
+  /* Show the dropdown menu on hover */
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+.avatar{
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+
+.home-content{
+    display: inline-flex;
+    width: 100%;
+    height: 100%;
+    padding-left: 23%;
+}
+
+.sidebar{
+
+    width: 23% ;
+    height: 100%;
+    background-color: #0d1117;
+    padding-left: 32px;
+    padding-right: 32px;
+    font-size: 17px;
+    font-weight: 500;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-color:black;
+    border: 1px solid #30363d;
+    z-index: 1;
+    top: 0px !important;
+    left: 0px;
+    position: fixed;
+}
+
+.sidebar .detail{
+    margin-bottom: 10px;
+    font-size: 19px;
+    font-weight: 400;
+    letter-spacing: -1pt;
+}
+
+.sidebar .detail a{
+    text-decoration: none;
+    color: #c9d1d9;
+}
+
+.sidebar .detail a:hover{
+    color: rgb(26, 26, 192);
+}
+
+
+.course-detail{
+    display: block;
+    box-sizing: border-box;
+    padding-left: 10px;
+    border: 1px solid #292e35;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.course-detail:hover{
+    color:#3588ec;
+    background-color: #0f151d;
+    padding-left: 20px;
+    transition: all 0.5 ease;
+    cursor: pointer;
+}
+
+.course-full-name{
+    font-size: 20px;
+    font-weight: 300;
+    margin-left: 10px;
+    color: #8b949e;
+}
+
+.course-code{
+    padding-top: 10px;
+    font-size: 20px
+}
+
+.course-name{
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.courses{
+    width: 62%;
+    padding: 40px;
+    padding-left: 80px;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.course-card{
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    width: 100%;
+    height: auto;
+    display: flex;
+    padding: 16px;
+    border-radius: 6px;
+    padding: 10px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.course-body{
+    width: 100%;
+}
+
+.course-card .course-name{
+    font-family: 'Lato', sans-serif;
+    font-weight: 500;
+    font-size: 25px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.course-card p{
+    margin: 0;
+    color:#838991;
+}
+.infos{
+    display: none;
+    width: 35%;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 40px;
+}
+
+.announcements{
+    background-color: #0d1117;
+    border: 1px solid #292e35;
+    border-radius: 10px;
+    height: auto;
+    padding: 25px;
+    margin-bottom: 20px;
+}
+
+.recent-users{
+    background-color: #0d1117;
+    border: 1px solid #292e35;
+    border-radius: 10px;
+    height: auto;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: linear-gradient(
+        45deg,
+        #1a222e,
+        #0d1117
+    );
+}
+
+.btn{
+    box-sizing: border-box;
+    border: 1px solid #292e35;
+    border-radius: 6px;
+    font-weight: 600;
+    background-color: green;
+    color: #c9d1d9;
+}
+
+.event{
+    background-color: #0d1117;
+    border-bottom: 1px solid #292e35;
+    height: auto;
+    padding: 15px;
+    margin-bottom: 20px;
+    display: block;
+    border-radius: 10px;
+}
+
+.time{
+    color: #7a7b7c;
+}
+
+.input-code{
+    margin-left:30px; 
+    background-color: #0d1117;
+    border: 1px solid #30363d; 
+    box-sizing: border-box; 
+    color: #c9d1d9;
+    border-radius: 10px;
+    width: 300px;
+    padding-left: 20px;
+    height: 40px;
+    -webkit-transition: width 04s ease-in-out;
+    transition: width 0.4s ease-in-out;
+    font-size: 16px;
+}
+input.input-code::placeholder{
+    color: #c9d1d9;
+    font-size: 18px;
+    font-weight: 100;
+}
+.input-code:focus{
+    /* border: 1px solid #b3b9be; */
+    width: 400px;
+    outline: none;
+    border: 1px solid rgba(0,0,200,0.2);
+    box-shadow: 0 0 10px #1f77d4;
+}
+
+.card{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    border: 1px solid #292e35;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+#card-header{
+    color: white;
+    font-size: 25px;
+    font-weight: 500;
+    background-color: #0d1117;
+    border-bottom: 1px solid #292e35;
+    /* border-radius: 10px; */
+
+    /* font */
+}
+#card-body{
+    background-color: #0d1117;
+    color: #c9d1d9;
+    /* border-radius: 10px; */
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.card > hr {
+    margin-right: 0;
+    margin-left: 0;
+  }
+.card > .list-group {
+border-top: inherit;
+border-bottom: inherit;
+}
+.card > .list-group:first-child {
+border-top-width: 0;
+border-top-left-radius: calc(0.25rem - 1px);
+border-top-right-radius: calc(0.25rem - 1px);
+}
+.card > .list-group:last-child {
+border-bottom-width: 0;
+border-bottom-right-radius: calc(0.25rem - 1px);
+border-bottom-left-radius: calc(0.25rem - 1px);
+}
+.card > .card-header + .list-group,
+.card > .list-group + .card-footer {
+border-top: 0;
+}
+
+.card-body {
+flex: 1 1 auto;
+padding: 1rem 1rem;
+}
+
+.card-title {
+margin-bottom: 0.5rem;
+margin-top: 0.1rem;
+}
+
+.card-subtitle {
+margin-top: -0.25rem;
+margin-bottom: 0;
+}
+
+.card-text:last-child {
+margin-bottom: 0;
+}
+
+.card-link + .card-link {
+margin-left: 1rem;
+}
+
+.card-header {
+padding: 0.5rem 1rem;
+margin-bottom: 0;
+background-color: rgba(0, 0, 0, 0.03);
+border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+.card-header:first-child {
+border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
+}
+
+.card-footer {
+padding: 0.5rem 1rem;
+background-color: rgba(0, 0, 0, 0.03);
+border-top: 1px solid rgba(0, 0, 0, 0.125);
+}
+.card-footer:last-child {
+border-radius: 0 0 calc(0.25rem - 1px) calc(0.25rem - 1px);
+}
+
+.card-header-tabs {
+margin-right: -0.5rem;
+margin-bottom: -0.5rem;
+margin-left: -0.5rem;
+border-bottom: 0;
+}
+
+.card-header-pills {
+margin-right: -0.5rem;
+margin-left: -0.5rem;
+}
+
+
+.btn{
+    background-color: #238636;
+    border-radius: 6px;
+    box-sizing: border-box;
+    color: white;
+    height: 35px;
+    width: 100%;
+    text-align: center;
+    margin-top: 25px;
+    border:0;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    vertical-align: middle;
+    font-weight: 400;
+    text-align: center;
+    padding: 0.375rem 0.75rem;
+
+
+}
+
+hr {
+  margin: 1rem 0;
+  color: inherit;
+  background-color: currentColor;
+  border: 0;
+  opacity: 0.25;
+}
+
+
+/* ****************************Profile.html****************************** */
+
+.profile{
+    border-radius: 50%;
+    width: 260px;
+    height: 260px;
+    margin-bottom: 50px;
+}
+
+.personal-detail-section{
+    width: 30%;
+    padding-top: 100px;
+    padding-left: 10%;
+    padding-right: 5%;
+    display: block;
+
+}
+
+
+.btn2{
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    width: 90%;
+    height: 30px;
+    border-radius: 5px;
+    outline: none;
+    color: #c9d1d9;
+    background-color: #21262d;
+    border: 1px solid #f0f6fc1a;
+    transition: all .2s ease-in-out;
+    transition-property: color,background-color,border-color;
+}
+
+.btn2:hover{
+    color: white;
+    background-color: #343b46;
+    border: 1px solid #f0f6fc1a;
+}
+
+/* Style tab links */
+.tablink {
+    background-color: #0d1117;;
+    color: #c9d1d9;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    font-size: 18px;
+    width: 150px;
+    padding-left: 10px;
+  }
+  
+  .tablink:hover {
+    background-color: #0d1117;
+    border-bottom: 3px solid #343b46;
+  }
+
+  /* Style the tab content (and add height:100% for full page content) */
+  .tabcontent {
+    color: white;
+    display: none;
+    padding: 100px 20px;
+    height: 100%;
+  }
+
+
+  
+  #Overview {color: #c9d1d9;background-color: #0d1117;}
+  #Course {color: #c9d1d9;background-color: #0d1117;}
+  #Contact {color: #c9d1d9;background-color: #0d1117;}
+  #About {color: #c9d1d9;background-color: #0d1117;}
+
+
+  #filter-input{
+    background-color: #0d1117;
+    border: 1px solid #30363d; 
+    box-sizing: border-box; 
+    border-radius: 6px;
+    width: 40%;
+    padding-left: 20px;
+    height: 40px;
+    font-size: 16px;
+    /* -webkit-transition: width 04s ease-in-out;
+    transition: width 0.4s ease-in-out; */
+    color: white;
+}
+
+#filter-input:focus{
+    /* border: 1px solid #b3b9be; */
+    width: 40%;
+    outline: none !important;
+    border: 1px solid rgba(0,0,200,0.2);
+    box-shadow: 0 0 10px #1f77d4;
+}
+input#filter-input::placeholder{
+    color: ;
+}
+
+.btn3{
+    margin-left: 20px;
+    font-size: 16px;
+    font-weight: 600;
+    width: fit-content;
+    height: 40px;
+    border-radius: 5px;
+    outline: none;
+    color: #c9d1d9;
+    cursor: pointer;
+    background-color: #21262d;
+    border: 1px solid #f0f6fc1a;
+    transition: all .2s ease-in-out;
+    transition-property: color,background-color,border-color; 
+}
+
+.btn3:hover{
+    color: white;
+    background-color: #343b46;
+    border: 1px solid #f0f6fc1a;
+}
+
+.main-content{
+    display: block;
+    align-content: center;
+    justify-content: center;
+    padding-top: 100px;
+}
+
+
+.participants-table{
+    float: right;
+    display: block;
+    margin-top: 100px;
+    width: 100%;
+    font-size: 19px;
+    padding-left: 250px;
+    padding-right: 250px;
+    
+}
+#data-table{
+    background-color: #0d1117;
+    width: 100%;
+}
+
+#data-table th{
+    text-align: left;
+}
+
+#data-table tr:hover{
+    
+}
+
+.head{
+    display:block;
+
+}
+.head .course-card{
+    margin-right:40px;
+    margin-left: 40px;
+    display:block !important;
+}
+
+.head h1{
+    width: 100%;
+    
+}
+
+.main-content2{
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    width: 100%;
+    height: auto;
+    display: block;
+    padding: 16px;
+    border-radius: 6px;
+    padding: 10px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    margin-right: 40px;
+    margin-left: 40px;
+
+}

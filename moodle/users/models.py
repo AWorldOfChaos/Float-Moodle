@@ -1,6 +1,8 @@
 from django.db import models
 from django.db.models.fields.related import ForeignKey, OneToOneField
 from django.contrib.auth.models import User
+import os
+from django.conf import settings
 
 
 # Create your models here.
@@ -59,19 +61,32 @@ class Assignment(models.Model):
     name = models.CharField(max_length=50, unique=True, default="No name")
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     problem_statement = models.FileField(upload_to=upload_path, default=None)
-    dictionary_of_marks = {}
+    graded = models.BooleanField(default=False)
 
-    def upload_marks(self, marksDictionary):
-        pass
 
-    def extend_deadline(self, newdeadline):
-        pass
+def grades_path(instance, filename):
+    return "{}/grades/{}".format(instance.assignment.course.course_code, filename)
 
-    def download_submmissions(self):
-        pass
 
-    def modify_problem_statement(self):
-        pass
+class Evaluation(models.Model):
+    assignment = models.OneToOneField(Assignment, on_delete=models.CASCADE)
+    csv_file = models.FileField(upload_to=grades_path, default=None)
+
+    def evaluate(self):
+        # filePath = "/media/" + self.csv_file.name
+        filePath = os.path.join(settings.MEDIA_ROOT, self.csv_file.name)
+        file_instance = open(filePath, 'r')
+        for lines in file_instance.readlines():
+            lines = lines.split(",")
+            roll_number = lines[0]
+            marks = lines[1]
+            profile = Profile.objects.get(roll_number= roll_number)
+            student_instance = self.assignment.course.student_set.filter(obj=profile)[0]
+            submission = self.assignment.submission_set.filter(student = student_instance)[0]
+            submission.marks = marks
+            submission.save()
+        self.assignment.graded = True
+        self.assignment.save()
 
 
 def submission_path(instance, filename):
@@ -82,6 +97,7 @@ class Submission(models.Model):
     student = ForeignKey(Student, on_delete=models.CASCADE, default=None)
     assignment = ForeignKey(Assignment, on_delete=models.CASCADE)
     submittedFile = models.FileField(upload_to=submission_path, default=None)
+    marks = models.IntegerField(default=-1)
 
 
 class FeedbackModel(models.Model):

@@ -1,0 +1,49 @@
+{% load crispy_forms_tags %}
+{% load static %}
+<html lang="en">
+
+<head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>login</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+                integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+                crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/c70797d3ad.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="{% static 'courses/view.css' %}">
+</head>
+
+<body>
+
+        <main style="display: block; width: 100%; justify-content: center;">
+
+                <div class="d-flex">
+                        <div class="course-assignment">
+                                <div class="course-assignment-header">
+                                        Assignment
+                                </div>
+                                {% for submission in submissions %}
+                                <div class="course-assignment-content">
+                                        <p class="roll-number">{{submission.student.obj.roll_number}}</p>
+                                        <p><a href="/media/{{submission.submittedFile.name}}" download>download</a></p>
+                                </div>
+                                {% endfor %}
+                        </div>
+                </div>
+                
+                <div class="d-flex">
+                        <div class="form">
+                                {% load crispy_forms_tags %}
+                                <form method="POST" enctype="multipart/form-data" name="assignment_form">
+                                        {% csrf_token %}
+                                        {{ feedbackForm|crispy }}
+                                        <button type="submit" class="submit" name="feedback">Add Feedback as a CSV file</button>
+                                </form>
+                        </div>
+                </div>
+                
+        </main>
+</body>
+
+</html>

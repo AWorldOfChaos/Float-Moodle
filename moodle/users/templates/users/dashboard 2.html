@@ -1,0 +1,310 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="style.css" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/c70797d3ad.js" crossorigin="anonymous"></script>
+  <script src="js/filter.js"></script>
+  <title>Document</title>
+</head>
+
+<body>
+
+  <header style="top:0px;">
+    <div class="navbar">
+      <a href="#home" style="padding-top: 20px;width: fit-content; padding-right: 5px;"><i class="fas fa-book"
+          style="float: right;"></i></a>
+      <a href="#home" style="padding-top: 20px; text-align: left; padding-left: 5px;">Moodle</a>
+      <a href="#new course">
+        <form action="" method="post"><input type="text" class="input-code" placeholder="enter-course code"><button
+            style="margin: 0; padding: 0; background-color: rgba(255, 255, 255, 0);box-sizing: border-box;border: 0;cursor: pointer;"><i
+              class="fas fa-sign-in-alt" style="color: white;"></i></button></form>
+      </a>
+      <div class="dropdown" style="padding-top:15px;">
+        <button class="dropbtn"><i class="fas fa-user"></i>
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="#">Profile</a>
+          <a href="#">Logout</a>
+          <a href="#">Reset password</a>
+        </div>
+      </div>
+      <div class="dropdown" style="padding-top:15px;">
+        <button class="dropbtn"><i class="fas fa-plus"></i>
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="#">Link 1</a>
+          <a href="#">Link 2</a>
+          <a href="#">Link 3</a>
+        </div>
+      </div>
+      <div class="dropdown" style="padding-top:15px;">
+        <button class="dropbtn" id="myModalBtn"><i class="fas fa-bell"></i>
+        </button>
+        <!-- <div class="dropdown-content">
+          <a href="#">Link 1</a>
+          <a href="#">Link 2</a>
+          <a href="#">Link 3</a>
+        </div> -->
+      </div>
+    </div>
+  </header>
+  <!-- Trigger/Open The Modal -->
+
+  <!-- The Modal -->
+  <div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <div class="modal-head">
+        <p>Invites</p>
+        <span class="close">&times;</span>
+      </div>
+      <div class="invites">
+        <img src="network.jpg" alt="" class="avatar">
+        <div class="invite-content">
+          
+          <div class="invite-head">
+            <p style="font-family:'Lato', sans-serif;color: #c9d1d9;">Course-code</p>
+            <p style="color: #838991;">course-full-name</p>
+            <span class="accept"><i class="fas fa-check"></i></span>
+            <span class="decline"><i class="fas fa-times"></i></span>
+          </div>
+          <p>You have been invited to join this course</p>
+        </div>
+        
+        
+        
+      </div>
+      <div class="invites">
+        <img src="network.jpg" alt="" class="avatar">
+        <div class="invite-content">
+          
+          <div class="invite-head">
+            <p style="font-family:'Lato', sans-serif;color: #c9d1d9;">Course-code</p>
+            <p style="color: #838991;">Course-code</p>
+            <span class="accept"><i class="fas fa-check"></i></span>
+            <span class="decline"><i class="fas fa-times"></i></span>
+          </div>
+          <p>You have been invited to join this course</p>
+        </div>
+        
+        
+        
+      </div>
+      <div class="invites">
+        <img src="network.jpg" alt="" class="avatar">
+        <div class="invite-content">
+          
+          <div class="invite-head">
+            <p style="font-family:'Lato', sans-serif;color: #c9d1d9;">Course-code</p>
+            <p style="color: #838991;">Course-code</p>
+            <span class="accept"><i class="fas fa-check"></i></span>
+            <span class="decline"><i class="fas fa-times"></i></span>
+          </div>
+          <p>You have been invited to join this course</p>
+        </div>
+        
+        
+        
+      </div>
+      
+    </div>
+
+  </div>
+  <div class="home-content">
+    <div class="sidebar">
+      <div style="padding: left 10px; display: block;margin-top: 80px;">
+        <h3 style="font-size: 20px; font-weight: 400;">courses</h3>
+        <input type="text" id="filter-input" style="width: 100%;background-color: #010409;"
+          placeholder="Find Course...">
+      </div>
+      <hr>
+
+      <div class="detail">
+        <img src="house.png" alt="" style="width: 20px;height: 20px;margin-right: 8px;"> <a href="">Home</a>
+      </div>
+      <div class="detail">
+        <img src="group.png" alt="" style="width: 20px;height: 20px;margin-right: 8px;"> <a href="">Participants</a>
+      </div>
+      <div class="detail">
+        <img src="score.png" alt="" style="width: 20px;height: 20px;margin-right: 8px;"> <a href="">Grades</a>
+      </div>
+      <hr style="border: 1px solid #30363d; color: #30363d;">
+      <div class="detail">
+        <img src="network.jpg" alt="" class="avatar" style="width: 25px;height: 25px;"> <a href="">CS215 / <span>Data
+            Interpretation and Analysis</span></a>
+      </div>
+      <div class="detail">
+        <img src="network 2.jpg" alt="" class="avatar" style="width: 25px;height: 25px;"><a href="">CS215 / <span>Data
+            Interpretation and Analysis</span></a>
+      </div>
+      <div class="detail">
+        <img src="network.jpg" alt="" class="avatar" style="width: 25px;height: 25px;"><a href="">CS213 / <span>Data
+            Interpretation and Analysis</span></a>
+      </div>
+      <div class="detail">
+        <img src="network 2.jpg" alt="" class="avatar" style="width: 25px;height: 25px;"><a href="">CS215 / <span>Data
+            Interpretation and Analysis</span></a>
+      </div>
+      <div class="detail">
+        <img src="network.jpg" alt="" class="avatar" style="width: 25px;height: 25px;"><a href="">CS215 / <span>Data
+            Interpretation and Analysis</span></a>
+      </div>
+      <div class="detail">
+        <img src="network 2.jpg" alt="" class="avatar" style="width: 25px ;height: 25px;"><a href=""> CS215 /
+          <span>Data Interpretation and Analysis</span></a>
+      </div>
+      <hr color="white" style="border: 1px solid #30363d; color: #30363d;">
+
+
+      <!-- ****************************************************************************************** -->
+      <!-- for sidebar content -->
+      <!-- ****************************************************************************************** -->
+      <!-- <div class="course-detail">
+        <div class="course-code">  
+          <i class="fas fa-graduation-cap" style="color:whitesmoke"></i> Home // write course code here
+        </div>
+        <div class="course-name"> // full name of the course
+          <p class="course-name">Data Analysis and Interpretation</p>
+        </div>
+      </div> -->
+
+    </div>
+    <div style="width: 100%;height: 100%; display: flex;">
+      <div class="courses">
+
+        <!-- ****************************************************************************************** -->
+        <!-- for recent courses -->
+        <!-- ****************************************************************************************** -->
+        <p style="font-size:20px;margin: 0; letter-spacing: -1pt;">Recent Activity</p>
+        <div class="course-card">
+          <img src="network.jpg" alt="" class="avatar">
+          <div class="course-body"><span class="course-name">Corse Name <span
+                class="course-full-name">course-full-name</span> <button class="btn3"
+                style="float: right !important;width: 100px;"><i class="fas fa-external-link-alt"
+                  style="margin-right: 5px;"></i>Visit</button> </span>
+            <p style="font-size: 20px;">department</p>
+            <p>Instructor</p>
+            <p style="float:right">last seen</p>
+          </div>
+        </div>
+        <div class="course-card">
+          <img src="network 2.jpg" alt="" class="avatar">
+          <div class="course-body"><span class="course-name">Corse Name <span
+                class="course-full-name">course-full-name</span> <button class="btn3"
+                style="float: right !important;width: 100px;"><i class="fas fa-external-link-alt"
+                  style="margin-right: 5px;"></i>Visit</button></span>
+            <p style="font-size: 20px;">department</p>
+            <p>Instructor</p>
+            <p style="float:right">last seen</p>
+          </div>
+        </div>
+        <div class="course-card">
+          <img src="network.jpg" alt="" class="avatar">
+          <div class="course-body"><span class="course-name">Corse Name <span
+                class="course-full-name">course-full-name</span> <button class="btn3"
+                style="float: right !important;width: 100px;"><i class="fas fa-external-link-alt"
+                  style="margin-right: 5px;"></i>Visit</button></span>
+            <p style="font-size: 20px;">department</p>
+            <p>Instructor</p>
+            <p style="float:right">last seen</p>
+          </div>
+        </div>
+        <div class="course-card">
+          <img src="network 2.jpg" alt="" class="avatar">
+          <div class="course-body"><span class="course-name">Corse Name <span
+                class="course-full-name">course-full-name</span> <button class="btn3"
+                style="float: right !important;width: 100px;"><i class="fas fa-external-link-alt"
+                  style="margin-right: 5px;"></i>Visit</button></span>
+            <p style="font-size: 20px;">department</p>
+            <p>Instructor</p>
+            <p style="float:right">last seen</p>
+          </div>
+        </div>
+
+        <div class="course-card">
+          <img src="network.jpg" alt="" class="avatar">
+          <div class="course-body"><span class="course-name">Corse Name <span
+                class="course-full-name">course-full-name</span> <button class="btn3"
+                style="float: right !important;width: 100px;"><i class="fas fa-external-link-alt"
+                  style="margin-right: 5px;"></i>Visit</button></span>
+            <p style="font-size: 20px;">department</p>
+            <p>Instructor</p>
+            <p style="float:right">last seen</p>
+          </div>
+        </div>
+        <div class="course-card">
+          <img src="network 2.jpg" alt="" class="avatar">
+          <div class="course-body"><span class="course-name">Corse Name <span
+                class="course-full-name">course-full-name</span> <button class="btn3"
+                style="float: right !important;width: 100px;"><i class="fas fa-external-link-alt"
+                  style="margin-right: 5px;"></i>Visit</button></span>
+            <p style="font-size: 20px;">department</p>
+            <p>Instructor</p>
+            <p style="float:right">last seen</p>
+          </div>
+        </div>
+      </div>
+      <div class="infos">
+        <div class="announcements">
+          <p style="font-size: 25px; font-weight: 500;"><i class="fas fa-bullhorn"
+              style="margin-right: 10px;"></i>Upcoming Activity</p>
+          <hr>
+          <div class="event">
+            <div class="time">21st August,2020</div>
+            <div style="overflow-y: hidden;height: 20px;">Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+              Obcaecati eius iusto possimus tenetur quia at sequi voluptate, hic consectetur quis. Corporis asperiores
+              magni nostrum repellendus assumenda! Est atque voluptate obcaecati!</div>
+          </div>
+          <div class="event">
+            <div class="time">21st August,2020</div>
+            <div style="overflow-y: hidden;height: 20px;">Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+              Obcaecati eius iusto possimus tenetur quia at sequi voluptate, hic consectetur quis. Corporis asperiores
+              magni nostrum repellendus assumenda! Est atque voluptate obcaecati!</div>
+          </div>
+          <div class="event">
+            <div class="time">21st August,2020</div>
+            <div style="overflow-y: hidden;height: 20px;">Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+              Obcaecati eius iusto possimus tenetur quia at sequi voluptate, hic consectetur quis. Corporis asperiores
+              magni nostrum repellendus assumenda! Est atque voluptate obcaecati!</div>
+          </div>
+        </div>
+        <div class="recent-users">
+          <p style="font-size: 20px;"><i class="fas fa-users" style="margin-right: 10px;"></i>Recent Users</p>
+          <hr>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae ipsum aliquid quasi, eveniet nam, quos
+          reprehenderit repudiandae veritatis at laborum quibusdam laudantium atque excepturi a! Architecto libero
+          earum
+          eligendi fugit!
+        </div>
+        <div class="events-this-week">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Optional JavaScript; choose one of the two! -->
+  <script src="js/modal.js"></script>
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+    crossorigin="anonymous"></script>
+
+  <!-- Option 2: Separate Popper and Bootstrap JS -->
+  <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+    -->
+</body>
+
+</html>

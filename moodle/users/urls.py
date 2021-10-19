@@ -1,4 +1,7 @@
+from django.conf import settings
 from django.urls import path
+
+from django.conf.urls.static import static
 from . import views
 from django.contrib.auth import views as auth_views
 
@@ -37,4 +40,4 @@ urlpatterns = [
     path('invites/', views.invite_view, name='view_invites'),
     path('invites/<str:course_code>/', views.invite_accept),
     path('courses/<str:course_code>/assignments/<int:assignment_id>', views.assignments, name='assignments')
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
