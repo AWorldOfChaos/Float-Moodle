@@ -56,7 +56,7 @@
   <div class="home-content">
     <div class="sidebar">
       <div style="padding: left 10px; display: flex;">
-        <h2>Courses</h2>
+        <h2>Details</h2>
       </div>
       <hr>
 
@@ -64,39 +64,41 @@
                                         <!-- for sidebar content -->
       <!-- ****************************************************************************************** -->
       <!-- <div class="course-detail">
-        <div class="course-code">  
+        <div class="course-code">
           <i class="fas fa-graduation-cap" style="color:whitesmoke"></i> Home // write course code here
         </div>
         <div class="course-name"> // full name of the course
           <p class="course-name">Data Analysis and Interpretation</p>
         </div>
       </div> -->
-<!--
+
       <div class="course-detail">
         <div class="course-code">
-          <i class="fas fa-house" style="color:whitesmoke"></i> Home
+          <i class="fas fa-graduation-cap" style="color:whitesmoke"></i> Name
         </div>
         <div class="course-name">
-          <p class="course-name">Data Analysis and Interpretation</p>
+          <p class="course-name">{{ profile.name }}</p>
         </div>
       </div>
 
       <div class="course-detail">
         <div class="course-code">
-          <i class="fas fa-graduation-cap" style="margin-right: 5px;"></i> CS215
+          <i class="fas fa-graduation-cap" style="margin-right: 5px;"></i> Roll Number
         </div>
         <div class="course-name">
-          <p class="course-name">Data Analysis and Interpretation</p>
+          <p class="course-name">{{ profile.roll_number }}</p>
         </div>
       </div>
+
       <div class="course-detail">
         <div class="course-code">
-          <i class="fas fa-graduation-cap" style="margin-right: 5px;"></i> CS213
+          <i class="fas fa-graduation-cap" style="margin-right: 5px;"></i> Email
         </div>
         <div class="course-name">
-          <p class="course-name">Data Analysis and Interpretation</p>
+          <p class="course-name">{{ user.email }}</p>
         </div>
       </div>
+      <!--
       <div class="course-detail">
         <div class="course-code">
           <i class="fas fa-graduation-cap" style="margin-right: 5px;"></i> CS207

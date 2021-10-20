@@ -69,12 +69,16 @@ def home(request):
                     student.save()
                 return redirect('/courses/{}/'.format(course_code))
             else:
-                context = {'all_student_courses': all_student_courses,
+                context = {'user': user,
+                           'profile': profile,
+                           'all_student_courses': all_student_courses,
                            'all_instructor_courses': all_instructor_courses,
                            'all_head_courses': all_head_courses}
                 return render(request, 'users/dashboard.html', context=context)
 
-    context = {'all_student_courses': all_student_courses,
+    context = {'user': user,
+               'profile': profile,
+               'all_student_courses': all_student_courses,
                'all_instructor_courses': all_instructor_courses,
                'all_head_courses': all_head_courses}
     return render(request, 'users/dashboard.html', context=context)
@@ -115,9 +119,12 @@ def assignments(request, course_code, assignment_id):
         filename = assignment.problem_statement.name.split('/')[-1]
         filePath = settings.MEDIA_URL + course_code + "/assignments/" + filename
         if assignment.graded:
-            submission_instance = assignment.submission_set.get(student=stud2[0])
-            marks = submission_instance.marks
-            marks = "You got " + str(marks) + " marks."
+            if assignment.submission_set.filter(student=stud2[0]):
+                submission_instance = assignment.submission_set.get(student=stud2[0])
+                marks = submission_instance.marks
+                marks = "You got " + str(marks) + " marks."
+            else:
+                marks = "Not submitted. You got 0 marks."
         else:
             marks = "not graded yet"
 
