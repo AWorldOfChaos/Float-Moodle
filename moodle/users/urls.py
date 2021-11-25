@@ -36,6 +36,7 @@ urlpatterns = [
     path('courses/<str:course_code>/', views.course_view),
     # path('join/<str:course_code>/', views.join_course),
     path('courses/<str:course_code>/invite/', views.invite),
+    path('courses/<str:course_code>/grades/', views.grades),
     path('courses/<str:course_code>/invite/<str:profile_name>', views.send_invite),
     path('invites/', views.invite_view, name='view_invites'),
     path('invites/<str:course_code>/', views.invite_accept),

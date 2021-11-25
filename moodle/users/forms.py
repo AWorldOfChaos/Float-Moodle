@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.forms.widgets import DateInput, NumberInput
 from users.models import Course, Assignment
 from django.db import models
 from django.forms import ModelForm
@@ -26,10 +27,15 @@ class CourseForm(ModelForm):
         fields = ['course_code', 'course_name', 'join_code']
 
 
+
 class Assignmentform(forms.Form):
     name = forms.CharField()
+    deadline = forms.DateField(widget=NumberInput(attrs={'type':'date'}))
+    weightage = forms.IntegerField()
     problem = forms.FileField(label="Select a File")
 
+class ExtensionForm(forms.Form):
+    new = forms.DateField(widget= NumberInput(attrs={'type':'date'}))
 
 class Removestudent(forms.Form):
     roll_no = forms.IntegerField()

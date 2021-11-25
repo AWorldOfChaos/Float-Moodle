@@ -174,6 +174,16 @@
         </div>
       </div>
       {% endfor %}
+
+      {% for assignment in unsubmitted %}
+          <div class="d-flex justify-content-center">
+                        <div class="course-assignment">
+                                <div class="course-assignment-header">
+                                {{assignment.course.course_code}}:  <li><a href = "courses/{{assignment.course.course_code}}/assignments/{{assignment.id}}">{{assignment.name}}</a>    deadline:{{assignment.deadline}}</li>
+                                </div>   
+                        </div>
+          </div>
+      {% endfor %}  
 <!--
       <div class="card" id="card">
         <div class="card-header" id="card-header">
