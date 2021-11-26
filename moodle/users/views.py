@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, CourseForm, Assignmentform, Removeinstructor, Removestudent, SubmissionForm,\
                    Feedback
-from .models import Course, Profile, Assignment, Submission, Student, Instructor, Invite, FeedbackModel, Evaluation
+from .models import Course, Profile, Assignment, Submission, Student, Instructor, Invite, FeedbackModel, Evaluation, Post, Replie
 from django.contrib.auth.models import User
 from django.views import View
 from django.conf import settings
@@ -336,3 +336,32 @@ def grades(request, course_code):
         pass
     else:
         return redirect('/courses/{}/'.format(course_code))
+
+@login_required(login_url="/login/")
+def forum(request, course_code):
+    profile = Profile.objects.all()
+    course = Course.objects.get(course_code=course_code)
+    if request.method=="POST":   
+        user = request.user
+        content = request.POST.get('content','')
+        post = Post(user1=user, post_content=content, course=course)
+        post.save()
+        alert = True
+        return render(request, "forum/forum.html", {'alert':alert})
+    #posts = Post.objects.filter().order_by('-timestamp')
+    return render(request, "forum/forum.html", {'posts':course.post_set.all().order_by('-timestamp'), 'code': course_code})
+
+@login_required(login_url="/login/")
+def discussion(request, myid, course_code):
+    post = Post.objects.filter(id=myid).first()
+    replies = Replie.objects.filter(post=post)
+    course = Course.objects.get(course_code=course_code)
+    if request.method=="POST":
+        user = request.user
+        desc = request.POST.get('desc','')
+        post_id =request.POST.get('post_id','')
+        reply = Replie(user = user, reply_content = desc, post=post, course=course)
+        reply.save()
+        alert = True
+        return render(request, "forum/discussion.html", {'alert':alert})
+    return render(request, "forum/discussion.html", {'post':post, 'replies':replies, 'code': course_code})

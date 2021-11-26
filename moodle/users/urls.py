@@ -39,5 +39,7 @@ urlpatterns = [
     path('courses/<str:course_code>/invite/<str:profile_name>', views.send_invite),
     path('invites/', views.invite_view, name='view_invites'),
     path('invites/<str:course_code>/', views.invite_accept),
-    path('courses/<str:course_code>/assignments/<int:assignment_id>', views.assignments, name='assignments')
+    path('courses/<str:course_code>/assignments/<int:assignment_id>', views.assignments, name='assignments'),
+    path("courses/<str:course_code>/forum/", views.forum, name="Forum"),
+    path("courses/<str:course_code>/forum/<int:myid>/discussion/", views.discussion, name="Discussions")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
