@@ -41,5 +41,9 @@ urlpatterns = [
     path('invites/', views.invite_view, name='view_invites'),
     path('invites/<str:course_code>/', views.invite_accept),
     path('courses/<str:course_code>/assignments/<int:assignment_id>', views.assignments, name='assignments'),
-    path('cli/', views.cli)
+    path('cli/', views.cli),
+    path("courses/<str:course_code>/forum/", views.forum, name="Forum"),
+    path("courses/<str:course_code>/forum/<int:myid>/discussion/", views.discussion, name="Discussions"),
+    path("conversations/", views.convos, name="Conversations"),
+    path("conversations/messages/<int:myid>", views.dm, name="Messages")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

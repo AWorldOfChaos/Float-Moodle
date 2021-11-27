@@ -41,16 +41,15 @@
           <a href="{% url 'view_invites' %}">View Invites</a>
         </div>
       </div>
-<!--      <div class="dropdown" style="padding-top:15px;">-->
-<!--        <button class="dropbtn"><i class="fas fa-bell"></i>-->
-<!--          <i class="fa fa-caret-down"></i>-->
-<!--        </button>-->
-<!--        <div class="dropdown-content">-->
-<!--          <a href="#">Link 1</a>-->
-<!--          <a href="#">Link 2</a>-->
-<!--          <a href="#">Link 3</a>-->
-<!--        </div>-->
-<!--      </div>-->
+
+      <div class="dropdown" style="padding-top:15px;">
+        <button class="dropbtn"><i class="fas fa-bell"></i>
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="conversations/">Messages</a>
+        </div>
+     </div>
     </div>
   </header>
   <div class="home-content">
@@ -164,13 +163,14 @@
       {% for course in all_student_courses %}
       <div class="card" id="card">
         <div class="card-header" id="card-header">
-          {{course.course_code}}
+          {{course.course.course_code}}
         </div>
         <div class="card-body" id="card-body">
-          <h3 class="card-title">{{course.course_name}}</h3>
+          <h3 class="card-title">{{course.course.course_name}}</h3>
           <p class="card-text">Role: Student</p>
-          <p class="card-text">Head Instructor: {{course.head_instructor.UserProfile}}</p>
-          <a href="/courses/{{course.course_code}}/" class="btn btn-primary">Go to course</a>
+          <p class="card-text">Head Instructor: {{course.course.head_instructor.UserProfile}}</p>
+          <progress style="width:80%"value={{course.count2}} max={{course.count1}}>50%</progress> {{course.percent}}% completed<br>
+          <a href="/courses/{{course.course.course_code}}/" class="btn btn-primary">Go to course</a>
         </div>
       </div>
       {% endfor %}
@@ -180,6 +180,17 @@
                         <div class="course-assignment">
                                 <div class="course-assignment-header">
                                 {{assignment.course.course_code}}:  <li><a href = "courses/{{assignment.course.course_code}}/assignments/{{assignment.id}}">{{assignment.name}}</a>    deadline:{{assignment.deadline}}</li>
+                                </div>
+                        </div>
+          </div>
+      {% endfor %}
+      <br>
+      Your ungraded assignments
+      {% for assignment in ungraded %}
+          <div class="d-flex justify-content-center">
+                        <div class="course-assignment">
+                                <div class="course-assignment-header">
+                                {{assignment.course.course_code}}:  <li><a href = "courses/{{assignment.course.course_code}}/assignments/{{assignment.id}}">{{assignment.name}}</a></li>
                                 </div>
                         </div>
           </div>

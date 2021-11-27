@@ -19,7 +19,7 @@
     <div class="head">
         <div class="course-card">
             <h1>{{ code }} Webpage</h1> <br>
-             <p>Head Instructor for the Course is {{ head }}</p>
+            <p>Head Instructor for the Course is {{ head }}</p>
         </div>
     </div>
     <button style="border: 0; background-color: grey; color: white; width:50px;height: 30px; cursor: pointer;"><a href="{% url 'home' %}" style="text-decoration: none;color: white;">Home</a> </button>
@@ -36,6 +36,7 @@
                     style="margin-right: 8px;"></i>Assignment</button>
             <button class="tablink" onclick="openPage('About', this, '#0d1117')"><i class="far fa-address-card"
                     style="margin-right: 8px;"></i>Content</button>
+            <button class="tablink"><a href="forum/" style="text-decoration: none;color: white;">Forum</a></button>
         </div>
         <div id="Overview" class="tabcontent">
             <h1>Instructors</h1>
@@ -85,7 +86,7 @@
                     <form method="POST" enctype="multipart/form-data" name="assignment_form">
                         {% csrf_token %}
                         {{ assignment_form|crispy }}
-                        <button type="submit" class="submit" name="assignment_form">Add assignment</button>
+                        <button type="submit" class="submit" name="assignment_form">Add assignmnet</button>
                     </form>
                 </div>
             </div>
@@ -105,8 +106,7 @@
                     </form>
                 </div>
             </div>
-                    </div>
-
+                </div>
                 </div>
             </div>
     </div>

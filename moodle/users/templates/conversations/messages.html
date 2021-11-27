@@ -1,0 +1,42 @@
+<button><a href="{% url 'Conversations' %}">Back</a> </button>
+<button><a href="{% url 'home' %}">Home</a> </button>
+{% for message in messages %}
+<div class="container">
+<div class="media">
+    <div class="media-body">
+      <h4 class="mt-0">{{message.user.UserProfile}}	&nbsp;<span><small style="font-size: 13px;">({{message.timestamp}})</small></span>   
+      : {{message.message_content}}</h4>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+<!-- Modal -->
+<div class="modal fade" id="reply" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        {% if user.is_authenticated %}
+        <div class="modal-body">
+          <form action="" method="POST"> {% csrf_token %}
+            <div class="form-group">
+              <label for="exampleFormControlTextarea1">Type Here</label>
+              <input type="hidden" name="post_id" value="{{post.id}}">
+              <textarea class="form-control" id="desc" name="desc" rows="3"></textarea>
+            </div>
+          </div>
+          {% else %}
+          <h3>Please Login first to post a reply</h3>
+          {% endif %}
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+ {% if alert %}
+{% comment %} alert('Your Reply has been posted successfully!!'); {% endcomment %}
+document.location = ""
+{% endif %}
+</script>

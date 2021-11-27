@@ -1,4 +1,4 @@
-
+{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -132,21 +132,7 @@
           <i class="fas fa-pencil-alt"></i>
           <h2>Register here</h2>
         </div>
-        <div class="info">
-          <input class="fname" type="text" name="course_code" placeholder="Course Code">
-          <input type="text" name="course_name" placeholder="Course Name">
-          <select>
-            <option value="course-type" selected>Department*</option>
-            <option value="short-courses">Aerospace Engineering</option>
-            <option value="featured-courses">Mechanical Engineering</option>
-            <option value="undergraduate">Computer Science & Engineering</option>
-            <option value="diploma">Civil Engineering</option>
-            <option value="certificate">Chemical Engineering</option>
-            <option value="masters-degree">Engineering Physics</option>
-            <option value="postgraduate">Electrical Engineering</option>
-          </select>
-            <input type="password" name="join_code" placeholder="Join Code">
-        </div>
+        {{form|crispy}}
         <button class="btn btn-success" type="submit">Create</button>
       </form>
     </div>

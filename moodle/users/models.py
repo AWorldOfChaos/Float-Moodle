@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 import os
 from django.conf import settings
 from datetime import date
-
+from django.utils.timezone import now
 
 # Create your models here.
 
@@ -28,6 +28,10 @@ class Course(models.Model):
     head_instructor = models.ForeignKey(User, on_delete=models.CASCADE)
     course_code = models.CharField(max_length=10, unique=True)
     join_code = models.CharField(max_length=10, unique=True)
+    canGrade = models.BooleanField(default= True)
+    canAddAssignment = models.BooleanField(default= True)
+    canRemoveStudents = models.BooleanField(default= False)
+    canExtendDeadline = models.BooleanField(default= True)
 
     def __str__(self):
         return self.course_code
@@ -120,3 +124,33 @@ class Invite(models.Model):
 
     def __str__(self):
         return self.course
+
+
+class Post(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, default='')
+    user1 = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    post_id = models.AutoField
+    post_content = models.CharField(max_length=5000)
+    timestamp = models.DateTimeField(default=now)
+
+
+class Replie(models.Model):
+    course = ForeignKey(Course, on_delete=models.CASCADE, default='')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    reply_id = models.AutoField
+    reply_content = models.CharField(max_length=5000)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, default='')
+    timestamp = models.DateTimeField(default=now)
+
+
+class Conversations(models.Model):
+    user1 = models.ForeignKey(User, on_delete=models.CASCADE, default=1, related_name="firstUser")
+    user2 = models.ForeignKey(User, on_delete=models.CASCADE, default=1, related_name="secondUser")
+    convo_id = models.AutoField
+
+
+class Messages(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    convo = models.ForeignKey(Conversations, on_delete=models.CASCADE, default=1)
+    message_content = models.CharField(max_length=5000)
+    timestamp = models.DateTimeField(default=now)

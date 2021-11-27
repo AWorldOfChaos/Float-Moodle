@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, CourseForm, Assignmentform, Removeinstructor, Removestudent, SubmissionForm, \
-    Feedback, ExtensionForm
-from .models import Course, Profile, Assignment, Submission, Student, Instructor, Invite, FeedbackModel, Evaluation
+    Feedback, ExtensionForm, Conversationform
+from .models import Course, Profile, Assignment, Submission, Student, Instructor, Invite, FeedbackModel, Evaluation, Post, Replie, Conversations, Messages
 from django.contrib.auth.models import User
 from django.views import View
 from django.conf import settings
@@ -15,6 +15,16 @@ from django.core.files.storage import FileSystemStorage
 
 
 # Create your views here.
+
+class Data:
+    def __init__(self, c, c1, c2):
+        self.course = c
+        self.count1 = str(c1)
+        self.count2 = str(c2)
+        if c1 == 0:
+            self.percent = 0
+        else:
+            self.percent = 100*c2/c1
 
 
 def register(request):
@@ -48,8 +58,15 @@ def home(request):
     profile = user.UserProfile
     all_student_courses = []
     students = profile.student_set.all()
+    progress = []
     for student in students:
-        all_student_courses.append(student.course)
+        count1 = 0
+        count2 = 0
+        for submission in student.submission_set.all():
+            count1 += 1
+            if submission.submitted:
+                count2 += 1
+        all_student_courses.append(Data(student.course, count1, count2))
 
     all_instructor_courses = []
     instructors = profile.instructor_set.all()
@@ -64,14 +81,20 @@ def home(request):
     unsubmittedAssignments = []
     for student in students:
         for submission in student.submission_set.all():
-            if (not submission.submitted):
+            if not submission.submitted:
                 if submission.assignment.is_open():
                     unsubmittedAssignments.append(submission.assignment)
 
-    print(unsubmittedAssignments)
+    ungradedAssignments = []
+    for course in Course.objects.all():
+        if course.head_instructor == user or profile.instructor_set.filter(course=course):
+            for assignment in course.assignment_set.all():
+                if not assignment.graded:
+                    ungradedAssignments.append(assignment)
+
     if request.method == "POST":
         join_code = request.POST['join_code']
-        print(join_code)
+        # print(join_code)
         course = Course.objects.get(join_code=join_code)
         if course:
             course_code = course.course_code
@@ -81,6 +104,9 @@ def home(request):
             if not stud2:
                 student = Student(obj=profile, course=course)
                 student.save()
+                for assignment in course.assignment_set.all():
+                    submission = Submission(assignment=assignment, student=student)
+                    submission.save()
             return redirect('/courses/{}/'.format(course_code))
         else:
             context = {'user': user,
@@ -88,7 +114,8 @@ def home(request):
                        'all_student_courses': all_student_courses,
                        'all_instructor_courses': all_instructor_courses,
                        'all_head_courses': all_head_courses,
-                       'unsubmitted': unsubmittedAssignments}
+                       'unsubmitted': unsubmittedAssignments,
+                       'ungraded': ungradedAssignments}
             return render(request, 'users/dashboard.html', context=context)
 
     context = {'user': user,
@@ -96,7 +123,8 @@ def home(request):
                'all_student_courses': all_student_courses,
                'all_instructor_courses': all_instructor_courses,
                'all_head_courses': all_head_courses,
-               'unsubmitted': unsubmittedAssignments}
+               'unsubmitted': unsubmittedAssignments,
+               'ungraded': ungradedAssignments}
     return render(request, 'users/dashboard.html', context=context)
 
 
@@ -456,3 +484,74 @@ def cli(request):
             break
 
     return redirect()
+
+
+@login_required(login_url="/login/")
+def forum(request, course_code):
+    profile = Profile.objects.all()
+    course = Course.objects.get(course_code=course_code)
+    if request.method == "POST":
+        user = request.user
+        content = request.POST.get('content','')
+        post = Post(user1=user, post_content=content, course=course)
+        post.save()
+        alert = True
+        return render(request, "forum/forum.html", {'alert': alert})
+    # posts = Post.objects.filter().order_by('-timestamp')
+    return render(request, "forum/forum.html", {'posts': course.post_set.all().order_by('-timestamp'), 'code': course_code})
+
+
+@login_required(login_url="/login/")
+def discussion(request, myid, course_code):
+    post = Post.objects.filter(id=myid).first()
+    replies = Replie.objects.filter(post=post)
+    course = Course.objects.get(course_code=course_code)
+    if request.method == "POST":
+        user = request.user
+        desc = request.POST.get('desc','')
+        post_id =request.POST.get('post_id','')
+        reply = Replie(user = user, reply_content = desc, post=post, course=course)
+        reply.save()
+        alert = True
+        return render(request, "forum/discussion.html", {'alert':alert})
+    return render(request, "forum/discussion.html", {'post':post, 'replies':replies, 'code': course_code})
+
+
+@login_required(login_url="/login/")
+def convos(request):
+    profile = Profile.objects.all()
+    user = request.user
+    convos = Conversations.objects.filter(user1=user)
+    convos2 = Conversations.objects.filter(user2=user)
+
+    form = Conversationform()
+    if request.method=="POST":
+        form1 = Conversationform(request.POST)
+        if form1.is_valid():
+            user1 = request.user
+            user2name = request.POST.get('Name')
+            print(user2name)
+            user2 = Profile.objects.get(name=user2name).user
+            if user2:
+                convo = Conversations(user1=user1, user2=user2)
+                convo.save()
+        form = Conversationform()
+        return render(request, "conversations/conversations.html", {'convos': convos, 'convos2': convos2, 'form': form})
+    else:
+        return render(request, "conversations/conversations.html", {'users': profile, 'convos': convos, 'convos2': convos2, 'form': form})
+    return render(request, "conversations/conversations.html", {'users': profile, 'convos': convos, 'convos2': convos2, 'form': form})
+
+
+@login_required(login_url="/login/")
+def dm(request, myid):
+    convo = Conversations.objects.filter(id=myid).first()
+    messages = Messages.objects.filter(convo=convo)
+    if request.method == "POST":
+        user = request.user
+        desc = request.POST.get('desc', '')
+        convo_id = request.POST.get('convo_id', '')
+        message = Messages(user=user, message_content=desc, convo=convo)
+        message.save()
+        alert = True
+        return render(request, "conversations/messages.html", {'alert':alert})
+    return render(request, "conversations/messages.html", {'convo': convo, 'messages': messages})

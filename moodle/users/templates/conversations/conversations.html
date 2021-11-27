@@ -1,0 +1,21 @@
+{% load crispy_forms_tags %}
+<button><a href="{% url 'Conversations' %}">Home</a> </button>
+<h2>Conversations</h2>
+{% for convo in convos %}
+      <li><a href="messages/{{convo.id}}">{{convo.user1.UserProfile.name}}-{{convo.user2.UserProfile.name}}</a></li>
+{% endfor %}
+{% for convoa in convos2 %}
+      <li><a href="messages/{{convoa.id}}">{{convoa.user1.UserProfile.name}}-{{convoa.user2.UserProfile.name}}</a></li>
+{% endfor %}
+
+<h3>To start a new conversation type in the name of the user</h3>
+<div class="d-flex justify-content-center">
+    <div class="form">
+           {% load crispy_forms_tags %}
+           <form method="POST" enctype="multipart/form-data" name="form">
+                      {% csrf_token %}
+                      {{ form|crispy }}
+                      <button type="submit" class="submit" name="submission">Add </button>
+           </form>
+    </div>
+</div>
