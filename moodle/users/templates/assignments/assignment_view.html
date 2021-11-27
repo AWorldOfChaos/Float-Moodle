@@ -17,7 +17,7 @@
 <body>
 
         <div style="display: block; width: 100%;">
-                
+
                 <div class="d-flex">
                         <div class="course-assignment">
                                 <div class="course-assignment-header">
@@ -28,11 +28,12 @@
                                 </div>
                         </div>
                 </div>
-                
+
 
                 <p style="color: white; text-align: center; font-size: 25px; font-weight: 300; margin-bottom: 30px;">
                         Submission
                 </p>
+                {% if open %}
                 <div class="d-flex justify-content-center">
                         <div class="form">
                                 {% load crispy_forms_tags %}
@@ -43,6 +44,18 @@
                                 </form>
                         </div>
                 </div>
+                {% else %}
+                <div class="d-flex justify-content-center">
+                        <div class="course-assignment">
+                                <div class="course-assignment-header">
+                                        Sorry, You are late. Deadline for this assignment is over.
+                                </div>
+
+                        </div>
+                </div>
+                {% endif %}
+
+
                 <div class="d-flex justify-content-center">
                         <div class="course-assignment">
                                 <div class="course-assignment-header">
@@ -53,8 +66,8 @@
                                 </div>
                         </div>
                 </div>
-                
-                
+
+
         </div>
 </body>
 

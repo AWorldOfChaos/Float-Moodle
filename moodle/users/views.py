@@ -1,14 +1,16 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm, CourseForm, Assignmentform, Removeinstructor, Removestudent, SubmissionForm,\
-                   Feedback
+from .forms import UserRegisterForm, CourseForm, Assignmentform, Removeinstructor, Removestudent, SubmissionForm, \
+    Feedback, ExtensionForm
 from .models import Course, Profile, Assignment, Submission, Student, Instructor, Invite, FeedbackModel, Evaluation
 from django.contrib.auth.models import User
 from django.views import View
 from django.conf import settings
 import os
 from django.core.files.storage import FileSystemStorage
+
+
 # Create your views here.
 
 
@@ -21,7 +23,8 @@ def register(request):
             email = form.cleaned_data.get('email')
             name = form.cleaned_data.get('name')
             roll_number = form.cleaned_data.get('roll_number')
-            profile = Profile(name=name, email=email, roll_number=roll_number, user=User.objects.filter(username=username)[0])
+            profile = Profile(name=name, email=email, roll_number=roll_number,
+                              user=User.objects.filter(username=username)[0])
             profile.save()
 
             messages.success(request, f'Your account has been created!')
@@ -55,32 +58,42 @@ def home(request):
     for head_instructor in head_instructors:
         all_head_courses.append(head_instructor)
 
+    unsubmittedAssignments = []
+    for student in students:
+        for submission in student.submission_set.all():
+            if (not submission.submitted):
+                if submission.assignment.is_open():
+                    unsubmittedAssignments.append(submission.assignment)
+
+    print(unsubmittedAssignments)
     if request.method == "POST":
-            join_code = request.POST['join_code']
-            print(join_code)
-            course = Course.objects.get(join_code=join_code)
-            if course:
-                course_code = course.course_code
-                user = request.user
-                profile = user.UserProfile
-                stud2 = profile.student_set.filter(course=course)
-                if not stud2:
-                    student = Student(obj=profile, course=course)
-                    student.save()
-                return redirect('/courses/{}/'.format(course_code))
-            else:
-                context = {'user': user,
-                           'profile': profile,
-                           'all_student_courses': all_student_courses,
-                           'all_instructor_courses': all_instructor_courses,
-                           'all_head_courses': all_head_courses}
-                return render(request, 'users/dashboard.html', context=context)
+        join_code = request.POST['join_code']
+        print(join_code)
+        course = Course.objects.get(join_code=join_code)
+        if course:
+            course_code = course.course_code
+            user = request.user
+            profile = user.UserProfile
+            stud2 = profile.student_set.filter(course=course)
+            if not stud2:
+                student = Student(obj=profile, course=course)
+                student.save()
+            return redirect('/courses/{}/'.format(course_code))
+        else:
+            context = {'user': user,
+                       'profile': profile,
+                       'all_student_courses': all_student_courses,
+                       'all_instructor_courses': all_instructor_courses,
+                       'all_head_courses': all_head_courses,
+                       'unsubmitted': unsubmittedAssignments}
+            return render(request, 'users/dashboard.html', context=context)
 
     context = {'user': user,
                'profile': profile,
                'all_student_courses': all_student_courses,
                'all_instructor_courses': all_instructor_courses,
-               'all_head_courses': all_head_courses}
+               'all_head_courses': all_head_courses,
+               'unsubmitted': unsubmittedAssignments}
     return render(request, 'users/dashboard.html', context=context)
 
 
@@ -115,6 +128,7 @@ def assignments(request, course_code, assignment_id):
     assignment = Assignment.objects.get(id=assignment_id)
     form1 = SubmissionForm()
     form2 = Feedback()
+    form3 = ExtensionForm()
     if stud2:
         filename = assignment.problem_statement.name.split('/')[-1]
         filePath = settings.MEDIA_URL + course_code + "/assignments/" + filename
@@ -129,31 +143,49 @@ def assignments(request, course_code, assignment_id):
             marks = "not graded yet"
 
         if request.method == "POST":
-            if "submission" in request.POST:
-                form = SubmissionForm(request.POST, request.FILES)
-                if form.is_valid():
-                    submission = Submission(student=Student.objects.get(obj=profile, course=course), assignment=assignment,
-                                            submittedFile=request.FILES['solution'])
-                    submission.save()
-                    return redirect('/courses/{}/'.format(course_code))
-                form1 = SubmissionForm
-                return render(request, 'assignments/assignment_view.html', {'submissionForm': form1, 'filePath':filePath})
+            if assignment.is_open():
+                if "submission" in request.POST:
+                    form = SubmissionForm(request.POST, request.FILES)
+                    if form.is_valid():
+                        submission = stud2[0].submission_set.get(assignment=assignment)
+                        submission.submittedFile = request.FILES['solution']
+                        submission.submitted = True
+                        submission.save()
+                        return redirect('/courses/{}/'.format(course_code))
+                    form1 = SubmissionForm
+                    return render(request, 'assignments/assignment_view.html',
+                                  {'open': assignment.is_open(), 'submissionForm': form1, 'filePath': filePath,
+                                   'active': assignment.active})
 
-        return render(request, 'assignments/assignment_view.html', {'submissionForm': form1, 'filePath':filePath, 'marks':marks})
+                else:
+                    return render(request, 'assignments/assignment_view.html',
+                                  {'open': assignment.is_open(), 'submissionForm': form1, 'filePath': filePath,
+                                   'active': assignment.active})
+        return render(request, 'assignments/assignment_view.html',
+                      {'open': assignment.is_open(), 'submissionForm': form1, 'filePath': filePath, 'marks': marks,
+                       'active': assignment.active})
 
     elif request.user == head_instructor:
         submissions = assignment.submission_set.all()
         if request.method == "POST":
-            form = Feedback(request.POST, request.FILES)
-            if form.is_valid():
-                csv_file = request.FILES['feedback']
-                evaluation = Evaluation(assignment=assignment, csv_file=csv_file)
-                evaluation.save()
-                evaluation.evaluate()
-                return redirect('/courses/{}/'.format(course_code))
-            form2 = Feedback()
+            if "feedback" in request.POST:
+                form = Feedback(request.POST, request.FILES)
+                if form.is_valid():
+                    csv_file = request.FILES['feedback']
+                    evaluation = Evaluation(assignment=assignment, csv_file=csv_file)
+                    evaluation.save()
+                    evaluation.evaluate()
+                    return redirect('/courses/{}/'.format(course_code))
 
-        return render(request, 'assignments/head_instructors_view.html', {"submissions":submissions, "feedbackForm":form2})
+            if "extend" in request.POST:
+                assignment.deadline = request.POST['new']
+                assignment.save()
+            form2 = Feedback()
+            form3 = ExtensionForm()
+
+        return render(request, 'assignments/head_instructors_view.html',
+                      {"deadline": assignment.deadline, "extensionform": form3, "submissions": submissions,
+                       "feedbackForm": form2, 'active': assignment.active})
 
 
 @login_required(login_url="/login/")
@@ -175,15 +207,18 @@ def course_view(request, course_code):
             if "assignment_form" in request.POST:
                 form = Assignmentform(request.POST, request.FILES)
                 if form.is_valid():
-                    newAssignment = Assignment(name=request.POST['name'], course=course,
-                                               problem_statement=request.FILES['problem'])
+                    newAssignment = Assignment(name=request.POST['name'], weightage=request.POST['weightage'],
+                                               deadline=request.POST['deadline'], course=course,
+                                               problem_statement=request.FILES['problem'], active=True)
                     newAssignment.save()
+                    for student in students:
+                        submission = Submission(assignment=newAssignment, student=student)
+                        submission.save()
                     return redirect('assignments', course_code=course.course_code, assignment_id=newAssignment.id)
 
                 form1 = Assignmentform()
                 form2 = Removeinstructor()
                 form3 = Removestudent()
-                messages.success(request, "successfully added an assignment")
                 return render(request, 'courses/course_view_head.html', {'code': course_code, 'head': profile.name,
                                                                          'all_students': students,
                                                                          'all_instructors': instructors,
@@ -248,9 +283,64 @@ def course_view(request, course_code):
                                                                  'all_instructors': instructors,
                                                                  'assignments': course.assignment_set.all()})
     elif ins2:
+        form1 = Assignmentform()
+        form2 = Removeinstructor()
+        form3 = Removestudent()
+        if request.method == 'POST':
+
+            if "assignment_form" in request.POST:
+                form = Assignmentform(request.POST, request.FILES)
+                if form.is_valid():
+                    newAssignment = Assignment(name=request.POST['name'], weightage=request.POST['weightage'],
+                                               deadline=request.POST['deadline'], course=course,
+                                               problem_statement=request.FILES['problem'], active=True)
+                    newAssignment.save()
+                    for student in students:
+                        submission = Submission(assignment=newAssignment, student=student)
+                        submission.save()
+                    return redirect('assignments', course_code=course.course_code, assignment_id=newAssignment.id)
+
+                form1 = Assignmentform()
+                form2 = Removeinstructor()
+                form3 = Removestudent()
+                return render(request, 'courses/course_view_ins.html', {'code': course_code, 'head': profile.name,
+                                                                         'all_students': students,
+                                                                         'all_instructors': instructors,
+                                                                         'assignment_form': form1,
+                                                                         "remove_student_form": form3,
+                                                                         "remove_instructor_form": form2,
+                                                                         'assignments': course.assignment_set.all()})
+
+            elif "remove_student_form" in request.POST:
+                form = Removestudent(request.POST)
+                if form.is_valid():
+                    student_profile = Profile.objects.get(roll_number=form.cleaned_data.get('roll_no'))
+                    student = Student.objects.filter(obj=student_profile, course=course)[0]
+                    student.delete()
+
+                form1 = Assignmentform()
+                form2 = Removeinstructor()
+                form3 = Removestudent()
+                messages.success(request, "successfully removed a student")
+                return render(request, 'courses/course_view_ins.html', {'code': course_code, 'head': profile.name,
+                                                                         'all_students': students,
+                                                                         'all_instructors': instructors,
+                                                                         'assignment_form': form1,
+                                                                         "remove_student_form": form3,
+                                                                         "remove_instructor_form": form2,
+                                                                         'assignments': course.assignment_set.all()})
+
+            form1 = Assignmentform()
+            form2 = Removeinstructor()
+            form3 = Removestudent()
+
         return render(request, 'courses/course_view_ins.html', {'code': course_code, 'head': profile.name,
-                                                                'all_students': students,
-                                                                'all_instructors': instructors})
+                                                                 'all_students': students,
+                                                                 'all_instructors': instructors,
+                                                                 'assignment_form': form1,
+                                                                 "remove_student_form": form3,
+                                                                 "remove_instructor_form": form2,
+                                                                 'assignments': course.assignment_set.all()})
     else:
 
         return render(request, 'courses/course_view_not.html', {'code': course_code, 'head': profile.name,
@@ -285,13 +375,14 @@ def invite(request, course_code):
 
 
 @login_required(login_url="/login/")
-def send_invite(request, course_code, profile_name):
+def send_invite(request, course_code, rollno):
     course = Course.objects.get(course_code=course_code)
     user = request.user
-    profile = Profile.objects.get(name=profile_name)
+    profile = Profile.objects.get(roll_number=rollno)
     if user == course.head_instructor:
         inv = Invite(course=course, profile=profile)
         inv.save()
+        return redirect('/courses/{}/'.format(course_code))
     else:
         return redirect('/courses/{}/'.format(course_code))
 
@@ -310,8 +401,11 @@ def invite_view(request):
 def invite_accept(request, course_code):
     course = Course.objects.get(course_code=course_code)
     user = request.user
-    ins = Instructor(obj=user.UserProfile, course=course)
-    ins.save()
+    profile = user.UserProfile
+    ins2 = profile.instructor_set.filter(course=course)
+    if not ins2:
+        ins = Instructor(obj=user.UserProfile, course=course)
+        ins.save()
     # Need to remove student user as required
     # Need to delete invite from invite_list
     # Need to implement feature to delete invite
@@ -329,10 +423,19 @@ def grades(request, course_code):
     profile = head_instructor.UserProfile
     instructors = course.instructor_set.all()
     if request.user == head_instructor or ins2:
-        # show all grades
-        pass
+        data = dict()
+        for assignment in course.assignment_set.all():
+            a = []
+            for submission in assignment.submission_set.all():
+                a.append(submission.marks)
+            data[assignment.name] = a
+        return render(request, 'users/grades.html', {'data': data})
     elif stud2:
-        # show only own grades
-        pass
+        data = dict()
+        student = stud2[0]
+        for submission in student.submission_set.all():
+            if submission.assignment.course == course:
+                data[submission.assignment.name] = submission.marks
+        return render(request, 'users/grades.html', {'data': data})
     else:
         return redirect('/courses/{}/'.format(course_code))

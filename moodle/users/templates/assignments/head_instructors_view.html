@@ -17,7 +17,14 @@
 <body>
 
         <main style="display: block; width: 100%; justify-content: center;">
+                <div class="d-flex justify-content-center">
+                        <div class="course-assignment">
+                                <div class="course-assignment-header">
+                                        Deadline: {{ deadline }}
+                                </div>
 
+                        </div>
+                </div>
                 <div class="d-flex">
                         <div class="course-assignment">
                                 <div class="course-assignment-header">
@@ -31,7 +38,7 @@
                                 {% endfor %}
                         </div>
                 </div>
-                
+
                 <div class="d-flex">
                         <div class="form">
                                 {% load crispy_forms_tags %}
@@ -42,7 +49,17 @@
                                 </form>
                         </div>
                 </div>
-                
+                <div class="d-flex">
+                        <div class="form">
+                                {% load crispy_forms_tags %}
+                                <form method="POST" enctype="multipart/form-data" name="assignment_form">
+                                        {% csrf_token %}
+                                        {{ extensionform|crispy }}
+                                        <button type="submit" class="submit" name="extend">Extend Deadline</button>
+                                </form>
+                        </div>
+                </div>
+
         </main>
 </body>
 

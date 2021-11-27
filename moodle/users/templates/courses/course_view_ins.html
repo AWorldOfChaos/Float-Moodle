@@ -19,7 +19,7 @@
     <div class="head">
         <div class="course-card">
             <h1>{{ code }} Webpage</h1> <br>
-            <p>Head Instructor for the Course is {{ head }}</p>
+             <p>Head Instructor for the Course is {{ head }}</p>
         </div>
     </div>
     <button style="border: 0; background-color: grey; color: white; width:50px;height: 30px; cursor: pointer;"><a href="{% url 'home' %}" style="text-decoration: none;color: white;">Home</a> </button>
@@ -41,7 +41,7 @@
             <h1>Instructors</h1>
 
             <ul>
-                {% for instructor in all_instructor %}
+                {% for instructor in all_instructors %}
                 <li>{{ instructor }}</li>
                 {% endfor %}
             </ul>
@@ -85,7 +85,7 @@
                     <form method="POST" enctype="multipart/form-data" name="assignment_form">
                         {% csrf_token %}
                         {{ assignment_form|crispy }}
-                        <button type="submit" class="submit" name="assignment_form">Add assignmnet</button>
+                        <button type="submit" class="submit" name="assignment_form">Add assignment</button>
                     </form>
                 </div>
             </div>
@@ -105,7 +105,8 @@
                     </form>
                 </div>
             </div>
-                </div>
+                    </div>
+
                 </div>
             </div>
     </div>

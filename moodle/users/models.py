@@ -3,6 +3,7 @@ from django.db.models.fields.related import ForeignKey, OneToOneField
 from django.contrib.auth.models import User
 import os
 from django.conf import settings
+from datetime import date
 
 
 # Create your models here.
@@ -61,7 +62,13 @@ class Assignment(models.Model):
     name = models.CharField(max_length=50, unique=True, default="No name")
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     problem_statement = models.FileField(upload_to=upload_path, default=None)
+    deadline = models.DateTimeField(auto_now_add= False)
+    weightage = models.IntegerField(default= 0)
     graded = models.BooleanField(default=False)
+    active = models.BooleanField(default= True)
+
+    def is_open(self):
+        return date.today() < self.deadline.date()
 
 
 def grades_path(instance, filename):
@@ -98,6 +105,7 @@ class Submission(models.Model):
     assignment = ForeignKey(Assignment, on_delete=models.CASCADE)
     submittedFile = models.FileField(upload_to=submission_path, default=None)
     marks = models.IntegerField(default=-1)
+    submitted = models.BooleanField(default= False)
 
 
 class FeedbackModel(models.Model):
