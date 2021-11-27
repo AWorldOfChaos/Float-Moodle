@@ -52,3 +52,8 @@ class SubmissionForm(forms.Form):
 
 class Feedback(forms.Form):
     feedback = forms.FileField(label="Select a csv file")
+
+
+class Cli(forms.Form):
+    name = forms.CharField(max_length=100)
+

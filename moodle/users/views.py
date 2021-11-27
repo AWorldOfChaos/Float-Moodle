@@ -8,6 +8,9 @@ from django.contrib.auth.models import User
 from django.views import View
 from django.conf import settings
 import os
+from prompt_toolkit import prompt
+from prompt_toolkit.history import FileHistory
+from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from django.core.files.storage import FileSystemStorage
 
 
@@ -165,7 +168,7 @@ def assignments(request, course_code, assignment_id):
                       {'open': assignment.is_open(), 'submissionForm': form1, 'filePath': filePath, 'marks': marks,
                        'active': assignment.active})
 
-    elif request.user == head_instructor:
+    elif request.user == head_instructor or ins2:
         submissions = assignment.submission_set.all()
         if request.method == "POST":
             if "feedback" in request.POST:
@@ -439,3 +442,17 @@ def grades(request, course_code):
         return render(request, 'users/grades.html', {'data': data})
     else:
         return redirect('/courses/{}/'.format(course_code))
+
+
+def cli(request):
+    while 1:
+        user_input = prompt('>',
+                            history=FileHistory('history.txt'),
+                            auto_suggest=AutoSuggestFromHistory(),
+                            )
+        if user_input != 'q':
+            print(user_input)
+        else:
+            break
+
+    return redirect()
