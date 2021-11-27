@@ -9,6 +9,7 @@ from django.views import View
 from django.conf import settings
 import os
 from django.core.files.storage import FileSystemStorage
+from django.core.mail import send_mail
 # Create your views here.
 
 
@@ -122,6 +123,8 @@ def course_create(request):
                                            course_code=course_code, join_code=join_code, canGrade= canGrade, canAddAssignment= canAddAssignment,
                                            canExtendDeadline= canExtendDeadline, canRemoveStudents= canRemoveStudents)
             course.save()
+            # send_mail('course creation on Moodle', 'you have created a new course on moodle', 'sslproject1000@gmail.com', [request.user.email],
+            # fail_silently= False)
             return redirect('/courses/{}/'.format(course_code))
     else:
         form = CourseForm()
@@ -164,6 +167,8 @@ def assignments(request, course_code, assignment_id):
                         submission.submittedFile = request.FILES['solution']
                         submission.submitted = True
                         submission.save()
+                        # send_mail('course creation on Moodle', 'you have made a submission to an assignment.', 'sslproject1000@gmail.com', [request.user.email],
+                        # fail_silently= False)
                         return redirect('/courses/{}/'.format(course_code))
                     form1 = SubmissionForm
                     return render(request, 'assignments/assignment_view.html', {"deadline": assignment.deadline,'open': assignment.is_open(), 'submissionForm': form1, 'filePath':filePath, 'active':assignment.active})
@@ -218,6 +223,8 @@ def course_view(request, course_code):
                     for student in students:
                         submission = Submission(assignment= newAssignment, student= student)
                         submission.save()
+                        # send_mail('course creation on Moodle', 'A new assignment has been added on moodle', 'sslproject1000@gmail.com', [student.obj.user.email],
+                        # fail_silently= False)
                     return redirect('assignments', course_code=course.course_code, assignment_id=newAssignment.id)
 
                 form1 = Assignmentform()
