@@ -21,10 +21,14 @@ class CourseForm(ModelForm):
     course_code = forms.CharField(max_length=10)
     course_name = forms.CharField(max_length=200)
     join_code = forms.CharField(max_length=10)
+    canGrade = forms.BooleanField(required= False)
+    canAddAssignment = forms.BooleanField(required= False)
+    canExtendDeadline = forms.BooleanField(required= False)
+    canRemoveStudents = forms.BooleanField(required= False)
 
     class Meta:
         model = Course
-        fields = ['course_code', 'course_name', 'join_code']
+        fields = ['course_code', 'course_name', 'join_code', 'canGrade', 'canAddAssignment', 'canExtendDeadline', 'canRemoveStudents']
 
 
 

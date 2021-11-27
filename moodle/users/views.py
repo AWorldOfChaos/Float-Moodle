@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, CourseForm, Assignmentform, Removeinstructor, Removestudent, SubmissionForm,\
                    Feedback, ExtensionForm
-from .models import Course, Profile, Assignment, Submission, Student, Instructor, Invite, FeedbackModel, Evaluation
+from .models import *
 from django.contrib.auth.models import User
 from django.views import View
 from django.conf import settings
@@ -61,6 +61,14 @@ def home(request):
             if(not submission.submitted):
                 if submission.assignment.is_open():
                     unsubmittedAssignments.append(submission.assignment)
+
+    ungradedAssignments = []
+    for course in Course.objects.all():
+        if course.head_instructor == user or profile.instructor_set.filter(course= course):
+            for assignment in course.assignment_set.all():
+                if not assignment.graded:
+                    ungradedAssignments.append(assignment)
+
     if request.method == "POST":
             join_code = request.POST['join_code']
             print(join_code)
@@ -73,6 +81,9 @@ def home(request):
                 if not stud2:
                     student = Student(obj=profile, course=course)
                     student.save()
+                    for assignment in course.assignment_set.all():
+                        submission = Submission(assignment= assignment, student= student)
+                        submission.save()
                 return redirect('/courses/{}/'.format(course_code))
             else:
                 context = {'user': user,
@@ -80,7 +91,8 @@ def home(request):
                            'all_student_courses': all_student_courses,
                            'all_instructor_courses': all_instructor_courses,
                            'all_head_courses': all_head_courses,
-                            'unsubmitted':unsubmittedAssignments}
+                            'unsubmitted':unsubmittedAssignments,
+                            'ungraded':ungradedAssignments}
                 return render(request, 'users/dashboard.html', context=context)
 
     context = {'user': user,
@@ -88,7 +100,8 @@ def home(request):
                'all_student_courses': all_student_courses,
                'all_instructor_courses': all_instructor_courses,
                'all_head_courses': all_head_courses,
-               'unsubmitted':unsubmittedAssignments}
+               'unsubmitted':unsubmittedAssignments,
+                            'ungraded':ungradedAssignments}
     return render(request, 'users/dashboard.html', context=context)
 
 
@@ -101,8 +114,13 @@ def course_create(request):
             course_code = form.cleaned_data.get('course_code')
             course_name = form.cleaned_data.get('course_name')
             join_code = form.cleaned_data.get('join_code')
+            canGrade = form.cleaned_data.get('canGrade')
+            canAddAssignment = form.cleaned_data.get('canAddAssignment')
+            canRemoveStudents = form.cleaned_data.get('canRemoveStudents')
+            canExtendDeadline = form.cleaned_data.get('canExtendDeadline')
             course = Course.objects.create(head_instructor=request.user, course_name=course_name,
-                                           course_code=course_code, join_code=join_code)
+                                           course_code=course_code, join_code=join_code, canGrade= canGrade, canAddAssignment= canAddAssignment,
+                                           canExtendDeadline= canExtendDeadline, canRemoveStudents= canRemoveStudents)
             course.save()
             return redirect('/courses/{}/'.format(course_code))
     else:
@@ -148,11 +166,11 @@ def assignments(request, course_code, assignment_id):
                         submission.save()
                         return redirect('/courses/{}/'.format(course_code))
                     form1 = SubmissionForm
-                    return render(request, 'assignments/assignment_view.html', {'open': assignment.is_open(), 'submissionForm': form1, 'filePath':filePath, 'active':assignment.active})
+                    return render(request, 'assignments/assignment_view.html', {"deadline": assignment.deadline,'open': assignment.is_open(), 'submissionForm': form1, 'filePath':filePath, 'active':assignment.active})
 
                 else:
-                    return render(request, 'assignments/assignment_view.html', {'open': assignment.is_open(), 'submissionForm': form1, 'filePath':filePath, 'active':assignment.active})
-        return render(request, 'assignments/assignment_view.html', {'open': assignment.is_open(), 'submissionForm': form1, 'filePath':filePath, 'marks':marks, 'active':assignment.active})
+                    return render(request, 'assignments/assignment_view.html', {"deadline": assignment.deadline,'open': assignment.is_open(), 'submissionForm': form1, 'filePath':filePath, 'active':assignment.active})
+        return render(request, 'assignments/assignment_view.html', {"deadline": assignment.deadline,'open': assignment.is_open(), 'submissionForm': form1, 'filePath':filePath, 'marks':marks, 'active':assignment.active})
 
     elif request.user == head_instructor:
         submissions = assignment.submission_set.all()
@@ -366,3 +384,42 @@ def grades(request, course_code):
         return render(request, 'users/grades.html', {'data': data})
     else:
         return redirect('/courses/{}/'.format(course_code))
+
+
+@login_required(login_url="/login/")
+def forum(request, course_code):
+    course = Course.objects.get(course_code=course_code)
+    students = course.student_set.all()
+    prof2 = request.user.UserProfile
+    stud2 = prof2.student_set.filter(course=course)
+    ins2 = prof2.instructor_set.filter(course=course)
+    head_instructor = course.head_instructor
+    profile = head_instructor.UserProfile
+    instructors = course.instructor_set.all()
+    alert = False
+    if request.user == head_instructor or ins2 or stud2:
+        if request.method == "POST":
+            user = request.user
+            content = request.POST.get('content')
+            post = Post(user=user, content=content, course= course)
+            post.save()
+            alert = True
+            return render(request, 'discussion/forum.html', {'alert': alert, 'course_code': course.course_code})
+        else:
+            return render(request, 'discussion/forum.html', {"posts": Post.objects.filter(course= course), 'course_code': course.course_code})
+    else:
+        return redirect('/courses/{}/'.format(course_code))
+    return render(request, 'discussion/forum.html', {"posts": Post.objects.filter(course= course), 'course_code': course.course_code})
+
+@login_required(login_url="/login/")
+def discussion(request, course_code, post_id):
+    post = Post.objects.filter(id=post_id).first()
+    replies = Reply.objects.filter(post=post)
+    if request.method=="POST":
+        user = request.user
+        desc = request.POST['desc']
+        reply = Reply(user = user, content = desc, post=post)
+        reply.save()
+        alert = True
+        return render(request, "discussion/discussion.html", {'alert':alert})
+    return render(request, "discussion/discussion.html", {'post':post, 'replies':replies})

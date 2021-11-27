@@ -28,6 +28,10 @@ class Course(models.Model):
     head_instructor = models.ForeignKey(User, on_delete=models.CASCADE)
     course_code = models.CharField(max_length=10, unique=True)
     join_code = models.CharField(max_length=10, unique=True)
+    canGrade = models.BooleanField(default= True)
+    canAddAssignment = models.BooleanField(default= True)
+    canRemoveStudents = models.BooleanField(default= False)
+    canExtendDeadline = models.BooleanField(default= True)
 
     def __str__(self):
         return self.course_code
@@ -104,7 +108,7 @@ class Submission(models.Model):
     student = ForeignKey(Student, on_delete=models.CASCADE, default=None)
     assignment = ForeignKey(Assignment, on_delete=models.CASCADE)
     submittedFile = models.FileField(upload_to=submission_path, default=None)
-    marks = models.IntegerField(default=-1)
+    marks = models.IntegerField(default=0)
     submitted = models.BooleanField(default= False)
 
 
@@ -113,6 +117,18 @@ class FeedbackModel(models.Model):
     assignment = ForeignKey(Assignment, on_delete=models.CASCADE)
     feedback = models.TextField(default="")
 
+
+class Post(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post_id = models.AutoField
+    content = models.CharField(max_length=5000)
+    
+class Reply(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    reply_id = models.AutoField
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.CharField(max_length=5000)
 
 class Invite(models.Model):
     course = ForeignKey(Course, on_delete=models.CASCADE)
