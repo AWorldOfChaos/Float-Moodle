@@ -45,3 +45,6 @@ class SubmissionForm(forms.Form):
 
 class Feedback(forms.Form):
     feedback = forms.FileField(label="Select a csv file")
+
+class Conversationform(forms.Form):
+    Name = forms.CharField(max_length=50)

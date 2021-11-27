@@ -128,3 +128,14 @@ class Replie(models.Model):
     reply_content = models.CharField(max_length=5000) 
     post = models.ForeignKey(Post, on_delete=models.CASCADE, default='')
     timestamp= models.DateTimeField(default=now)
+
+class Conversations(models.Model):
+    user1 = models.ForeignKey(User, on_delete=models.CASCADE, default=1, related_name="firstUser")
+    user2 = models.ForeignKey(User, on_delete=models.CASCADE, default=1, related_name="secondUser")
+    convo_id = models.AutoField
+
+class Messages(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    convo = models.ForeignKey(Conversations, on_delete=models.CASCADE, default=1 )
+    message_content = models.CharField(max_length=5000) 
+    timestamp= models.DateTimeField(default=now)

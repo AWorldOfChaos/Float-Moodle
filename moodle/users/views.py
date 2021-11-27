@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm, CourseForm, Assignmentform, Removeinstructor, Removestudent, SubmissionForm,\
+from .forms import UserRegisterForm, CourseForm,Conversationform, Assignmentform, Removeinstructor, Removestudent, SubmissionForm,\
                    Feedback
-from .models import Course, Profile, Assignment, Submission, Student, Instructor, Invite, FeedbackModel, Evaluation, Post, Replie
+from .models import Course, Profile, Assignment, Submission, Student, Instructor, Invite, FeedbackModel, Evaluation, Post, Replie, Conversations, Messages
 from django.contrib.auth.models import User
 from django.views import View
 from django.conf import settings
@@ -365,3 +365,42 @@ def discussion(request, myid, course_code):
         alert = True
         return render(request, "forum/discussion.html", {'alert':alert})
     return render(request, "forum/discussion.html", {'post':post, 'replies':replies, 'code': course_code})
+
+@login_required(login_url="/login/")
+def convos(request):
+    profile = Profile.objects.all()
+    user = request.user
+    convos = Conversations.objects.filter(user1 = user)
+    convos2 = Conversations.objects.filter(user2 = user)
+
+    form = Conversationform()
+    if request.method=="POST":
+        form1 = Conversationform(request.POST)
+        if form1.is_valid():
+            user1 = request.user
+            user2name = request.POST.get('Name')
+            print(user2name)
+            user2 = Profile.objects.get(name=user2name).user
+            if user2:
+                convo = Conversations(user1=user1, user2=user2)
+                convo.save()
+        form = Conversationform()
+        return render(request, "conversations/conversations.html", {'convos' : convos, 'convos2' : convos2, 'form' : form})
+    else:
+        return render(request, "conversations/conversations.html", {'users': profile, 'convos' : convos, 'convos2' : convos2, 'form' : form})
+
+    return render(request, "conversations/conversations.html", {'users': profile, 'convos' : convos, 'convos2' : convos2, 'form' : form})
+
+@login_required(login_url="/login/")
+def dm(request, myid):
+    convo = Conversations.objects.filter(id=myid).first()
+    messages = Messages.objects.filter(convo=convo)
+    if request.method=="POST":
+        user = request.user
+        desc = request.POST.get('desc','')
+        convo_id =request.POST.get('convo_id','')
+        message = Messages(user = user, message_content = desc, convo=convo)
+        message.save()
+        alert = True
+        return render(request, "conversations/messages.html", {'alert':alert})
+    return render(request, "conversations/messages.html", {'convo' : convo, 'messages' : messages})
