@@ -18,8 +18,8 @@
  {% load static %}
   <header style="top:0px;">
     <div class="navbar">
-      <a href="#home" style="padding-top: 20px;"><i class="fas fa-book"></i></a>
-      <a href="#home" style="padding-top: 20px;margin-left: 10px;">Moodle</a>
+      <a href="/about/" style="padding-top: 20px;"><i class="fas fa-book"></i></a>
+      <a href="/about/" style="padding-top: 20px;margin-left: 10px;">Moodle</a>
       <a href="#new course"><form method="post">{% csrf_token %}<input type="text" class="input-code" name='join_code' placeholder="enter-course code"><button type="submit" style="margin:0;padding:0;"><i class="fas fa-sign-in-alt"></i></button></form></a>
       <div class="dropdown" style="padding-top:15px;">
         <button class="dropbtn"><i class="fas fa-user"></i>
