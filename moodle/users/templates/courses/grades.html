@@ -1,0 +1,531 @@
+{% load crispy_forms_tags %}
+{% load static %}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>head_view</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
+        integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css"
+        integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous" />
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://kit.fontawesome.com/c70797d3ad.js" crossorigin="anonymous"></script>
+    <script src="{% static 'users/filter.js' %}"></script>
+    <script src="{% static 'users/randomColor.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'courses/grade_view.css' %}">
+    <!-- <script>
+        // jquery function
+        $(document).ready(function () {
+            var ctx = document.getElementById('myChart').getContext('2d');
+
+            var bgColor = [];
+            for (var i = 1; i < `{{ data_length }}`; i++) {
+                bgColor.push(getRandomColor());
+            }
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [`{% for assignment_name in assignment_names %}` `{{ assignment_name }}`, `{% endfor %}`],
+                    datasets: [{
+                        label: '',
+                        data: [`{% for assignment_mark in assignment_marks %}` `{{ assignment_mark }}`, `{% endfor %}`],
+                        backgroundColor: [getRandomColor(),],
+
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            grid: {
+                                color: '#30363d'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: '#30363d'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+    <script>
+        function randomValues(count, min, max) {
+            const delta = max - min;
+            return Array.from({ length: count }).map(() => Math.random() * delta + min);
+        }
+
+        const boxplotData = {
+            // define label tree
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            datasets: [{
+                label: 'Dataset 1',
+                backgroundColor: 'rgba(255,0,0,0.5)',
+                borderColor: 'red',
+                borderWidth: 1,
+                outlierColor: '#999999',
+                padding: 10,
+                itemRadius: 0,
+                data: [
+                    randomValues(100, 0, 100),
+                    randomValues(100, 0, 20),
+                    randomValues(100, 20, 70),
+                    randomValues(100, 60, 100),
+                    randomValues(40, 50, 100),
+                    randomValues(100, 60, 120),
+                    randomValues(100, 80, 100)
+                ]
+            }, {
+                label: 'Dataset 2',
+                backgroundColor: 'rgba(0,0,255,0.5)',
+                borderColor: 'blue',
+                borderWidth: 1,
+                outlierColor: '#999999',
+                padding: 10,
+                itemRadius: 0,
+                data: [
+                    randomValues(100, 60, 100),
+                    randomValues(100, 0, 100),
+                    randomValues(100, 0, 20),
+                    randomValues(100, 20, 70),
+                    randomValues(40, 60, 120),
+                    randomValues(100, 20, 100),
+                    randomValues(100, 80, 100)
+                ]
+            }]
+        };
+        window.onload = () => {
+            const ctx = document.getElementById("canvas").getContext("2d");
+            window.myBar = new Chart(ctx, {
+                type: 'boxplot',
+                data: boxplotData,
+                options: {
+                    responsive: true,
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Chart.js Box Plot Chart'
+                    }
+                }
+            });
+
+        };
+    </script> -->
+    {% if is_stud %}
+    <script>
+        // jquery function
+        $(document).ready(function () {
+            var ctx = document.getElementById('myChart').getContext('2d');
+
+            var bgColor1 = [];
+            for (var i = 1; i < {{length}}; i++) {
+                bgColor1.push('rgba(54, 162, 235, 0.2)');
+            }
+
+            var borColor1 = []
+            for (var j = 1; j < {{length}}; j++) {
+                borColor1.push('rgb(54, 162, 235)');
+            }
+            var bgColor2 = [];
+            for (var i = 1; i < {{length}}; i++) {
+                bgColor2.push('rgba(54, 162, 235, 0.2)');
+            }
+
+            var borColor2 = []
+            for (var j = 1; j < {{length}}; j++) {
+                borColor2.push('rgb(54, 162, 235)');
+            }
+
+            var dataset1 = {
+                label: 'your',
+                data: [{% for assignment in assignments %} {{assignment.submission.marks}}, {% endfor %}],
+                backgroundColor: bgColor1,
+                borderColor: borColor1,
+                borderWidth: 1
+            }
+
+            var dataset2 = {
+                label: 'Class Average',
+                data: [{% for assignment in assignments %} {{assignment.average}}, {% endfor %}],
+                backgroundColor: bgColor2,
+                borderColor: borColor2,
+                borderWidth: 1
+            }
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [{% for assignment in assignments %} {{assignment.submission.assignment.name}}, {% endfor %}],//loop through queryset,
+                    datasets: [
+                        dataset1, dataset2
+                    ]
+                },
+                options: {
+                    barValueSpacing: 10,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                min: 0,
+                            }
+                        }]
+                    }
+                }
+            });
+        });
+        </script>
+        <script>
+        function change_tab(tab_name) {
+            var tabs=["#Problem-Statement","#Feedback","#Submission"]
+            tabs.push();
+            tabs.push();
+
+            for (var t of tabs) {
+                if (t !== tab_name) {
+                    var c = $(t).prop("classList");
+                    if (c[0] !== "active-tab") {
+                        $(t).addClass("non-active-tab");
+                    }
+                    else {
+                        $(t).removeClass("active-tab");
+                        $(t).addClass("non-active-tab");
+                    }
+
+                }
+                else {
+                    var c = $(t).prop("classList");
+                    if (c !== tab_name) {
+                        $(t).removeClass("non-active-tab");
+                        $(t).addClass("active-tab");
+                    }
+                    else {
+                        break;
+                    }
+
+                }
+            }
+        }
+    </script>
+        {% endif %}
+        {% if is_head %}
+        <script>
+            $(document).ready(function () {
+                // for drawing histograms
+            {% for assignment in assignments %}
+
+            var bgColor1 = [];
+            for (var i = 1; i < 10; i++) {
+                bgColor1.push('rgba(54, 162, 235, 0.2)');
+            }
+
+            var borColor1 = []
+            for (var j = 1; j <10 ; j++) {
+                borColor1.push('rgb(54, 162, 235)');
+            }
+
+            var dataset1 = {
+                label: '{{ assignment.assignment.name }}',
+            data: [{% for number in assignment.numbers %} {{ number }}, {% endfor %}],
+            backgroundColor: bgColor1,
+            borderColor: borColor1,
+            borderWidth: 1
+                }
+
+            const ctx = document.getElementById('{{ assignment.assignment.id }}').getContext('2d');
+
+            var chart = new Chart(ctx, {
+                type: 'bar',
+            data: {
+                labels: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],//loop through queryset,
+            datasets: [
+            dataset1
+            ]
+                    },
+            options: {
+                scales: {
+                xAxes: [{
+                display: false,
+            barPercentage: 1.3,
+            ticks: {
+                max: 3,
+                                }
+                            }, {
+                display: true,
+            ticks: {
+                autoSkip: false,
+            max: 4,
+                                }
+                            }],
+            yAxes: [{
+                ticks: {
+                beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            `{% endfor %}`
+
+            });
+    </script>
+    <script>
+            function change_tab(tab_name) {
+            var tabs=[]
+            tabs.push("#Problem-Statement");
+            {% for assignment in assignments %}
+            tabs.push('#{{ assignment.name }}');
+            {% endfor %}
+            tabs.push("#Submission");
+            tabs.push("#Feedback");
+
+            for (var t of tabs) {
+                if (t !== tab_name) {
+                    var c = $(t).prop("classList");
+            if (c[0] !== "active-tab") {
+                $(t).addClass("non-active-tab");
+                    }
+            else {
+                $(t).removeClass("active-tab");
+            $(t).addClass("non-active-tab");
+                    }
+
+                }
+            else {
+                    var c = $(t).prop("classList");
+            if (c !== tab_name) {
+                $(t).removeClass("non-active-tab");
+            $(t).addClass("active-tab");
+                    }
+            else {
+                        break;
+                    }
+
+                }
+            }
+        }
+    </script>
+    {% endif %}
+
+
+</head>
+
+<body>
+    <header style="top:0px; height: 60px;">
+        <div class="navbar">
+            <a href="{% url 'home' %}" style="padding: 7px 0px; text-align: center;">Moodle</a>
+            <a href="#new course">
+                <form action="" method="post">{% csrf_token %}<input type="text" class="input-code" name="join_code"
+                        placeholder="enter-course code"><button type="submit"
+                        style="margin: 0; padding: 0; background-color: rgba(255, 255, 255, 0);box-sizing: border-box;border: 0;cursor: pointer;"><i
+                            class="fas fa-sign-in-alt" style="color: white;"></i></button></form>
+            </a>
+            <a href="{% url 'home' %}"
+                style="padding: 7px 0px; font-weight: 600;margin-left: 20px;margin-right: 10px;text-align: center;">Home</a>
+            <a href=""
+                style="padding: 7px 0px; font-weight: 600;margin-left: 5px;margin-right: 10px;text-align: center;">Blog</a>
+            <a href=""
+                style="padding: 7px 0px; font-weight: 600;margin-left: 5px;margin-right: 10px;text-align: center;">Profile</a>
+            <div class="dropdown">
+                <button class="dropbtn"><i class="fas fa-user" style="font-size: 14px;"></i>
+                    <i class="fa fa-caret-down" style="font-size: 10px;"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="#">Profile</a>
+                    <a href="{% url 'password_reset' %}">Reset password</a>
+                    <a href="{% url 'logout' %}">Logout</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn"><i class="fas fa-plus" style="font-size: 14px;"></i>
+                    <i class="fa fa-caret-down" style="font-size: 10px;"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="{% url 'create_course' %}">Create Course</a>
+                    <a href="#">Join Course</a>
+                    <a href="{% url 'view_invites' %}">View Invites</a>
+                </div>
+            </div>
+        </div>
+        </div>
+    </header>
+
+
+<!--    <div class="course-header">-->
+<!--        <h1><a href="">{{course_name}}</a></h1>-->
+<!--    </div>-->
+<!--    <div class="content-nav">-->
+<!--        <a href="/courses/{{code}}"><i class="fas fa-book-open"-->
+<!--                style="margin-right: 8px;color:#424a53"></i>Assignment</a>-->
+<!--        <a href="/courses/{{code}}/instructors"><i class="fas fa-chalkboard-teacher"-->
+<!--                style="margin-right: 8px;color:#424a53"></i>Instructor</a>-->
+<!--        <a href="/courses/{{code}}/students"><i class="far fa-user"-->
+<!--                style="margin-right: 8px;color:#424a53"></i>Student</a>-->
+<!--        <a href="/courses/{{code}}/forum"><i class="far fa-comment"-->
+<!--                style="margin-right: 8px;color:#424a53"></i>Forum</a>-->
+<!--        <a class="active" href="/courses/{{code}}/insights"><i class="fas fa-chart-line"-->
+<!--                style="margin-right: 5px;color:#424a53; font-size: 17px;"></i>-->
+<!--            Insights</a>-->
+
+
+<!--        {% if is_head %}-->
+<!--        <a href="/courses/{{code}}/add_assignment"><i class="fas fa-chart-line"-->
+<!--                style="margin-right: 5px;color:#424a53; font-size: 17px;"></i>-->
+<!--            Add Assignment</a>-->
+<!--        {% endif %}-->
+<!--        {% if is_inst %}-->
+<!--        <a href=""><i class="fas fa-chart-line" style="margin-right: 5px;color:#424a53; font-size: 17px;"></i>-->
+<!--            Add Assignment</a>-->
+<!--        {% endif %}-->
+
+<!--    </div>-->
+
+    {% if is_stud %}
+
+    <div class="exam-paper">
+        <div>
+            <div class="question-sidebar">
+                <div class="question-number active-ver-bar" onclick="change_tab('#Problem-Statement')">
+                    Grades
+                </div>
+                <div class="question-number" onclick="change_tab('#Submission')">
+                    Graphical Analysis
+                </div>
+            </div>
+        </div>
+        <div id="Problem-Statement" class="active-tab" style="width:100%; ">
+            <div class="course-assignment" style="padding: 0;margin-left: 20px;margin-top: 0px;">
+
+
+                <table style="margin: 0;width: 100%;">
+                    <tbody>
+                        <tr>
+                            <th>Assignment</th>
+                            <th>Marks</th>
+                            <th>Weightage</th>
+                            <th>Average</th>
+                        </tr>
+
+                        {% for assignment in assignments %}
+                        <tr>
+                            <td>
+                                <div>
+                                    <i class="far fa-file"
+                                        style="margin-right: 10px;align-self: center;color:#424a53"></i><a
+                                        href="courses/{{code}}/assignment/{{assignment.assignment.id}}">{{assignment.submission.assignment.name}}</a>
+
+                                </div>
+                            </td>
+                            <td>
+                                {{assignment.submission.marks}}
+                            </td>
+                            <td>
+                                0-{{assignment.submission.assignment.weightage}}
+                            </td>
+                            <td>
+                                {{assignment.average}}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td><div>
+                                    <i class="far fa-file"
+                                        style="margin-right: 10px;align-self: center;color:#424a53"></i><a
+                                        href="courses/{{code}}/assignment/{{assignment.assignment.id}}">Total</a>
+
+                                </div>
+                            </td>
+                            <td>{{total}}</td>
+                            <td>{{total2}}</td>
+                            <td>{{avg2}}</td>
+                        </tr>
+
+
+                    </tbody>
+
+                </table>
+            </div>
+
+
+        </div>
+        <div id="Submission" class="active-tab" style="width:100%; ">
+                <canvas id="myChart" width="400" height="100"></canvas>
+        </div>
+        <script>
+            $(".question-number").click(function () {
+                    var classes = $(".question-number");
+            for (var c of classes) {
+                        var l = $(c).prop("classList");
+            for (var i of l) {
+                            if (i == "active-ver-bar") {
+                $(c).removeClass("active-ver-bar");
+            break;
+                            }
+                        }
+                    }
+            $(this).addClass("active-ver-bar");
+                });
+        </script>
+        {% endif %}
+
+        {% if is_head %}
+        <div class="exam-paper">
+            <div>
+                <div class="question-sidebar">
+                    <div class="question-number active-ver-bar" onclick="change_tab('#Problem-Statement')">
+                        Grades
+                    </div>
+                    {% for assignment in assignments %}
+                    <div class="question-number" onclick="change_tab('#{{assignment.name}}')">
+                        {{assignment.assignment.name}}
+                    </div>
+                    {% endfor %}
+                    <div class="question-number" onclick="change_tab('#Feedback')">
+                        Statistics
+                    </div>
+                </div>
+            </div>
+            <div id="Problem-Statement" class="active-tab" style="width:100%; ">
+
+            </div>
+            {% for assignment in assignments %}
+            <div id="{{assignment.name}}" class="non-active-tab" style="width:100%; ">
+                <canvas id="{{assignment.assignment.id}}" width="400" height="100"></canvas>
+            </div>
+            {% endfor %}
+            <div id="Feedback" class="non-active-tab" style="width:100%; ">
+
+            </div>
+
+        </div>
+        <script>
+            $(".question-number").click(function () {
+                var classes = $(".question-number");
+            for (var c of classes) {
+                    var l = $(c).prop("classList");
+            for (var i of l) {
+                        if (i == "active-ver-bar") {
+                $(c).removeClass("active-ver-bar");
+            break;
+                        }
+                    }
+                }
+            $(this).addClass("active-ver-bar");
+            });
+        </script>
+
+        {% endif %}
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+            crossorigin="anonymous"></script>
+</body>
+
+</html>

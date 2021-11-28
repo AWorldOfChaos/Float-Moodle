@@ -23,7 +23,13 @@
         </div>
     </div>
     <button style="border: 0; background-color: grey; color: white; width:50px;height: 30px; cursor: pointer;"><a href="{% url 'home' %}" style="text-decoration: none;color: white;">Home</a> </button>
-    <button style="border: 0; background-color: grey; color: white; width:50px;height: 30px; cursor: pointer;"><a href="invite/" style="text-decoration: none;color: white;">Invite</a> </button>
+    <button style="border: 0; background-color: red; color: white; width:50px;height: 30px; cursor: pointer;"><a href="invite/" style="text-decoration: none;color: white;">Invite</a> </button>
+    <button style="border: 0; background-color: blue; color: white; width:60px;height: 30px; cursor: pointer;"><a href="grades/" style="text-decoration: none;color: white;">Grades</a> </button>
+    {% if forumOn %}
+    <form method="POST" enctype="multipart/form-data" name="toggle">{% csrf_token %}<button type="submit" name="toggle" style="border: 0; background-color: red; color: white; width:100px;height: 30px; cursor: pointer;">Disable Forum </button></form>
+    {% else %}
+    <form method="POST" enctype="multipart/form-data" name="toggle">{% csrf_token %}<button type="submit" name="toggle" style="border: 0; background-color: green; color: white; width:100px;height: 30px; cursor: pointer;">Enable Forum </button></form>
+    {% endif %}
 
     <!-- <h1>{{ code }} Webpage</h1> -->
     <br>

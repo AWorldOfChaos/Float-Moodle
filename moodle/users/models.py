@@ -32,6 +32,7 @@ class Course(models.Model):
     canAddAssignment = models.BooleanField(default= True)
     canRemoveStudents = models.BooleanField(default= False)
     canExtendDeadline = models.BooleanField(default= True)
+    forumActive = models.BooleanField(default=True)
 
     def __str__(self):
         return self.course_code
@@ -93,8 +94,8 @@ class Evaluation(models.Model):
             marks = lines[1]
             profile = Profile.objects.get(roll_number= roll_number)
             student_instance = self.assignment.course.student_set.filter(obj=profile)[0]
-            submission = self.assignment.submission_set.filter(student = student_instance)[0]
-            submission.marks = marks
+            submission = self.assignment.submission_set.filter(student=student_instance)[0]
+            submission.marks = marks*self.assignment.weightage/100
             submission.save()
         self.assignment.graded = True
         self.assignment.save()
@@ -108,8 +109,8 @@ class Submission(models.Model):
     student = ForeignKey(Student, on_delete=models.CASCADE, default=None)
     assignment = ForeignKey(Assignment, on_delete=models.CASCADE)
     submittedFile = models.FileField(upload_to=submission_path, default=None)
-    marks = models.IntegerField(default=-1)
-    submitted = models.BooleanField(default= False)
+    marks = models.IntegerField(default=0)
+    submitted = models.BooleanField(default=False)
 
 
 class FeedbackModel(models.Model):

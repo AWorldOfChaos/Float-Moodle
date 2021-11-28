@@ -1,0 +1,692 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+*{
+  box-sizing: border-box;
+}
+
+html{
+  height: 100%;
+}
+
+body{
+  /* letter-spacing: -1pt !important; */
+  font-size: 14px;
+  line-height: 1.5;
+  color: #c9d1d9;
+  background-color:#0d1117;
+  display: block;
+  height: 100%;
+  width: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  overflow-y: scroll;
+  margin:0px;
+}
+
+.avatar{
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.navbar {
+  overflow: hidden;
+  background-color: #161b22;
+  font-family: Arial;
+  z-index: 8;
+  font-size: 14px;
+  font-weight: 600;
+  height: 62px;
+  padding: 16px 32px;
+  position: relative;
+  width: 100%;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+
+}
+
+/* Links inside the navbar */
+.navbar a {
+  float: left;
+  font-size: 14px;
+  color: white;
+  text-align: center;
+  padding-top: 0;
+  padding-bottom: 0;
+  height: 28px;
+  margin-right: 10px;
+  text-decoration: none;
+}
+
+/* The dropdown container */
+.dropdown {
+  float: right;
+  overflow: hidden;
+  z-index: 10;
+  
+}
+
+/* Dropdown button */
+.dropdown .dropbtn {
+  cursor: pointer;
+  font-size: 14px;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 12px 0px;
+  background-color: inherit;
+  font-family: inherit; /* Important for vertical align on mobile phones */
+  margin: 0; /* Important for vertical align on mobile phones */
+  margin-right: 20px;
+}
+
+/* Add a red background color to navbar links on hover */
+
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+  display: none;
+  position: fixed;
+  background-color: #161b22;
+  color: white;
+  border-radius: 4px;
+  border: 1px solid #303a47;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 3;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  float: none;
+  font-weight: 300;
+  color: #8b949e;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+/* Add a grey background color to dropdown links on hover */
+.dropdown-content a:hover {
+  background-color: #58a6ff;
+  color:white
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.course-header{
+  padding-left: 50px;
+}
+
+.course-header h1{
+  margin-bottom: 10px;
+}
+
+.course-header h1 a{
+  text-decoration: none;
+  color: #58a6ff;
+  font-weight: 400;
+  font-size: 24px;
+}
+
+.tablink {
+    letter-spacing: 0pt;
+    background-color: #0d1117;
+    color: #c9d1d9;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    font-size: 16px;
+    width: 150px;
+    padding-left: 10px;
+  }
+  .tablink span{
+    color: #c9d1d9;
+  }
+
+  /* .tablink i{
+    color: #838991;
+  }
+   */
+  .tablink:hover {
+    background-color: #0d1117;
+    border-bottom: 3px solid #343b46;
+  }
+
+  /* Style the tab content (and add height:100% for full page content) */
+  .tabcontent {
+    color: white;
+    display: none;
+    padding: 100px 20px;
+    height: 100%;
+  }
+
+
+  
+  #Overview {color: #c9d1d9;background-color: #0d1117;}
+  #Course {color: #c9d1d9;background-color: #0d1117;}
+  #Contact {color: #c9d1d9;background-color: #0d1117;}
+  #About {color: #c9d1d9;background-color: #0d1117;}
+
+
+  .avatar{
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    vertical-align: middle;
+    margin-right: 8px;
+} 
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 20; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #0d1117;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #30363d;
+  width: 35%; /* Could be more or less, depending on screen size */
+  border-radius: 6px;
+}
+
+
+.modal-head{
+    width: 100%;
+    display: flex;
+    border-bottom: 1px solid #30363d;
+}
+
+.modal-head p{
+    font-size: 20px;
+    width: 100%;
+    margin-top: 12px;
+}
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: rgb(148, 144, 144);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.invites{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+}
+
+.invite-head{
+    font-size: 16px;
+    display: flex;
+}
+
+.invite-head span.accept{
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.invite-head span.accept:hover{
+    color: green;
+}
+.invite-head span.decline{
+  margin-right: 10px;
+  cursor: pointer;
+}
+.invite-head span.decline:hover{
+  color:red;
+}
+.invite-content{
+      width: 100%;
+    display: block;
+    padding-right: 20px;
+}
+
+.invite-content p{
+    width: 100%;
+    margin-top: 0px;
+    margin-bottom: 5px;
+    color:#838991;
+}
+
+.invite-head .course-code{
+  font-family: 'Lato', sans-serif;
+  font-size: 18px;
+  padding-top: 0;
+  color: #c9d1d9;
+  width: auto;
+}
+.invite-head .course-name{
+  font-size: 16px;
+  width: 100%;
+  color: #838991;
+}
+
+
+.input-code{
+    
+  background-color: #0d1117;
+  border: 1px solid #30363d; 
+  box-sizing: border-box; 
+  color: #c9d1d9;
+  border-radius: 6px;
+  width: 272px;
+  padding: 0px 12px;
+  height: 28px;
+  -webkit-transition: width 04s ease-in-out;
+  transition: width 0.4s ease-in-out;
+  font-size: 14px;
+
+}
+input.input-code::placeholder{
+  color: #c9d1d9;
+  font-size: 14px;
+  font-weight: 100;
+}
+.input-code:focus{
+  /* border: 1px solid #b3b9be; */
+  width: 400px;
+  outline: none !important;
+  border: 1px solid rgb(19, 87, 189);
+  box-shadow: 0 0 5px 3px #1b5cbf;
+}
+
+.content-nav {
+  padding-left: 50px;
+  background-color: #0d1117;;
+  overflow: hidden;
+  border-bottom: 1px solid #30363d;
+  margin-bottom: 40px;
+}
+
+/* Style the links inside the navigation bar */
+.content-nav a {
+  float: left;
+  color: #c9d1d9;
+  text-align: center;
+  padding: 14px 20px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Change the color of links on hover */
+.content-nav a:hover {
+  border-bottom: 3px solid #30363d;
+}
+
+/* Add a color to the active/current link */
+.content-nav a.active {
+  background-color: #0d1117;
+  border-bottom: 3px solid #f78166;
+  color: white;
+}
+
+.no-display{
+  display: none;
+}
+
+.course-assignment{
+  background-color: #0d1117;
+  margin-left: 150px;
+  margin-top: 25px;
+  width: 823px;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  font-size: 18px;
+  display: block;
+}
+
+.course-assignment tbody{
+  width: 100%;
+  border: 0;
+}
+
+  tr{
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid #30363d;
+
+}
+.course-assignment th{
+  background-color: #161b22;
+  font-weight: 500;
+  padding: 16px 10px;
+  font-size: 15px;
+  margin: 0;
+  border: 0;
+
+}
+
+.course-assignment th:first-child{
+  border-top-left-radius: 6px;
+}
+
+
+.course-assignment th:last-child{
+  border-top-right-radius: 6px;
+}
+
+.course-assignment td{
+  font-weight: 400;
+  padding: 10px 10px;
+  font-size: 14px;
+  margin: 0;
+}
+
+td a{
+  /* border-bottom: 1px solid #30363d; */
+  padding: 10px 30px;
+  font-size: 14px;
+  text-decoration: none;
+  color: #c9d1d9;
+}
+.course-assignment-header{
+  background-color: #161b22;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  padding: 16px;
+  border-bottom: 1px solid #30363d;
+  font-size: 16px;
+  font-weight: 600;
+  height: 55px;
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.course-assignment-content{
+  border-bottom: 1px solid #30363d;
+  padding: 10px 30px;
+  display: flex;
+  font-size: 14px;
+  justify-content: space-between;
+
+}
+
+.course-assignment-content:hover{
+  background-color: #161b22;
+}
+
+.course-assignment-content p{
+  padding:0;
+  margin: 0;
+  /* margin-left: 10px; */
+  /* width: fit-content; */
+
+}
+
+.course-assignment-content a{
+  text-decoration: none;
+  color: #c9d1d9;
+}
+
+.utility-buttons{
+  display: block;
+  margin-top: 50px;
+  margin-left: 150px;
+  width: 823px;
+  display: inline-block;
+}
+
+.btn3{
+  margin-left: 20px;
+  font-size: 14px;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-weight: 500;
+  width: fit-content;
+  height: 30px;
+  border-radius: 5px;
+  outline: none;
+  color: #c9d1d9;
+  cursor: pointer;
+  background-color: #21262d;
+  border: 1px solid #f0f6fc1a;
+  transition: all .2s ease-in-out;
+  transition-property: color,background-color,border-color;
+  float: right; 
+
+}
+
+.btn3:hover{
+  color: white;
+  background-color: #343b46;
+  border: 1px solid #f0f6fc1a;
+}
+
+#filter-input{
+  background-color: #0d1117;
+  border: 1px solid #30363d; 
+  box-sizing: border-box; 
+  border-radius: 6px;
+  width: 60%;
+  padding-left: 20px;
+  height: 30px;
+  font-size: 14px;
+  /* -webkit-transition: width 04s ease-in-out;
+  transition: width 0.4s ease-in-out; */
+  color: white;
+}
+
+#filter-input:focus{
+  /* border: 1px solid #b3b9be; */
+  width: 60%;
+  outline: none !important;
+  border: 1px solid rgb(19, 87, 189);
+  box-shadow: 0 0 5px 3px #1b5cbf;
+}
+
+input#filter-input::placeholder{
+  color: #838991;
+  text-align: justify;
+}
+
+.accordion{
+
+}
+
+.accordion:last-child{
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  border-bottom: 0;
+}
+
+.accordion h3{
+  font-weight: 400;
+  font-size: 14px;
+  padding: 10px 30px;
+  margin-bottom: 0;
+}
+
+.accordion .ui-accordion-content{
+  border-bottom: 1px solid #30363d;
+  padding: 10px 30px;
+  display: flex;
+  border-radius: 0;
+  background-color: #0d1117;
+  border-right: #30363d;
+  border-left: #30363d;
+  color: #8b949e;
+}
+
+.accordion .ui-accordion-header{
+  color: #c9d1d9;
+  border-radius: 0;
+  background-color: #0d1117;
+  border-bottom: 1px solid #30363d;
+  border-right: none;
+  border-left: none;
+  border-top: none;
+  margin-top: 0;
+}
+
+.accordion .ui-accordion-header:last-child{
+  border-bottom: none;
+  border-radius: 6px;
+}
+.accordion .ui-accordion-content:last-child{
+  border-bottom: none;
+  border-radius: 6px;
+}
+
+.exam-paper{
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+
+}
+
+.question-sidebar{
+  margin-left: 150px;
+  margin-right: 20px;
+  width: 296px;
+  height: fit-content;
+  border: 1px solid #20252c;
+  border-radius: 4px;
+
+}
+
+.question-number{
+  width: 100%;
+  padding: 8px 16px;
+  color: #8b949e;
+  height: 38px;
+  border-bottom: 1px solid #20252c;
+  
+}
+
+.question-number:last-child{
+  border-bottom: none;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  width: 100%;
+  padding: 8px 16px;
+  color: #8b949e;
+  height: 38px;
+  border-bottom: 1px solid #20252c;
+}
+
+.active-ver-bar{
+  background-color: #161b22;
+  border-left: 2px solid #f78166;
+  width: 100%;
+  color: #c9d1d9;
+}
+
+
+.active-tab{
+  display: block;
+  width: 100%;
+}
+
+.non-active-tab{
+  display: none;
+}
+
+.question-detail{
+  display: block;
+  width: 100%;
+
+}
+
+.question{
+  max-width: 100%;
+  border: 1px solid #20252c;
+  margin-right: 100px;
+  border-radius: 4px;
+  padding: 20px;
+}
+
+.question-heading{
+  max-width: 100%;
+  border: 1px solid #20252c;
+  margin-right: 100px;
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.question-heading h3{
+  margin-top: 0;
+  margin-bottom: 5px;
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.question-heading p{
+  margin-top: 0px;
+  margin-bottom: 3px;
+  font-weight: 300;
+}
+.options{
+  margin-top: 20px;
+  border: 1px solid #20252c;
+  border-radius: 4px;
+  max-width: 100%;
+  margin-right: 100px;
+  padding: 20px;
+}
+
+
+.visible{
+  display: block;
+}
+
+.invisible{
+  display: none;
+}
+
+.submit{
+  background-color: #238636;
+  border-radius: 6px;
+  box-sizing: border-box;
+  color: white;
+  height: 35px;
+  width: 100%;
+  text-align: center;
+  margin-top: 20px;
+  border:0;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 5px 16px;
+
+}
+.submit:hover{
+  background-color: rgb(5, 104, 22);
+}
+.submit:active{
+  background-color: #20b43e;
+}
+
+#remove-form{
+
+  border: 1px solid #2b3138;
+  margin-left: 100px;
+  border-radius: 6px;
+  padding: 12px 16px;
+}

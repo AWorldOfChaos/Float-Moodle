@@ -12,6 +12,7 @@ from prompt_toolkit import prompt
 from prompt_toolkit.history import FileHistory
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from django.core.files.storage import FileSystemStorage
+import subprocess
 
 
 # Create your views here.
@@ -25,6 +26,23 @@ class Data:
             self.percent = 0
         else:
             self.percent = 100*c2/c1
+
+
+class StudentAssignmentData:
+    def __init__(self, s, avg, n):
+        self.submission = s
+        self.average = avg
+        self.name = n
+
+
+class InstructorAssignmentData:
+    def __init__(self, a, avg, var, lst, n):
+        self.assignment = a
+        self.average = avg
+        self.variance = var
+        # self.number = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.numbers = lst
+        self.name = n
 
 
 def register(request):
@@ -138,7 +156,7 @@ def course_create(request):
             course_name = form.cleaned_data.get('course_name')
             join_code = form.cleaned_data.get('join_code')
             course = Course.objects.create(head_instructor=request.user, course_name=course_name,
-                                           course_code=course_code, join_code=join_code)
+                                           course_code=course_code, join_code=join_code, forumActive=True)
             course.save()
             return redirect('/courses/{}/'.format(course_code))
     else:
@@ -196,7 +214,7 @@ def assignments(request, course_code, assignment_id):
                       {'open': assignment.is_open(), 'submissionForm': form1, 'filePath': filePath, 'marks': marks,
                        'active': assignment.active})
 
-    elif request.user == head_instructor or ins2:
+    elif request.user == head_instructor:
         submissions = assignment.submission_set.all()
         if request.method == "POST":
             if "feedback" in request.POST:
@@ -208,7 +226,75 @@ def assignments(request, course_code, assignment_id):
                     evaluation.evaluate()
                     return redirect('/courses/{}/'.format(course_code))
 
+            if "autograde" in request.POST:
+                form = Feedback(request.POST, request.FILES)
+                if form.is_valid():
+                    script_file = request.FILES['feedback']
+                    evaluation = Evaluation(assignment=assignment, csv_file=script_file)
+                    evaluation.save()
+                    filePath = os.path.join(settings.MEDIA_ROOT, evaluation.csv_file.name)
+                    for submission in assignment.submission_set.all():
+                        filename1 = submission.submittedFile.name.split('/')[-1]
+                        filepath1 = os.path.join(settings.MEDIA_ROOT, submission.submittedFile.name)
+                        proc = subprocess.Popen(['python', filePath, filepath1], stdout=subprocess.PIPE,
+                                                stderr=subprocess.STDOUT)
+                        output = proc.communicate()[0]
+                        marks = output.decode('UTF-8')[0]
+                        marks = int(marks)
+                        marks = marks * assignment.weightage
+                        submission.marks = marks
+                        submission.save()
+
+                        assignment.graded = True
+                        assignment.save()
+                    return redirect('/courses/{}/'.format(course_code))
+
             if "extend" in request.POST:
+                assignment.deadline = request.POST['new']
+                assignment.save()
+            form2 = Feedback()
+            form3 = ExtensionForm()
+
+        return render(request, 'assignments/head_instructors_view.html',
+                      {"deadline": assignment.deadline, "extensionform": form3, "submissions": submissions,
+                       "feedbackForm": form2, 'active': assignment.active})
+
+    elif ins2:
+        submissions = assignment.submission_set.all()
+        if request.method == "POST":
+            if "feedback" in request.POST:
+                form = Feedback(request.POST, request.FILES)
+                if form.is_valid() and course.canGrade:
+                    csv_file = request.FILES['feedback']
+                    evaluation = Evaluation(assignment=assignment, csv_file=csv_file)
+                    evaluation.save()
+                    evaluation.evaluate()
+                    return redirect('/courses/{}/'.format(course_code))
+
+            if "autograde" in request.POST:
+                form = Feedback(request.POST, request.FILES)
+                if form.is_valid() and course.canGrade:
+                    script_file = request.FILES['feedback']
+                    evaluation = Evaluation(assignment=assignment, csv_file=script_file)
+                    evaluation.save()
+                    filePath = os.path.join(settings.MEDIA_ROOT, evaluation.csv_file.name)
+                    for submission in assignment.submission_set.all():
+                        filename1 = submission.submittedFile.name.split('/')[-1]
+                        filepath1 = os.path.join(settings.MEDIA_ROOT, submission.submittedFile.name)
+                        proc = subprocess.Popen(['python', filePath, filepath1], stdout=subprocess.PIPE,
+                                                stderr=subprocess.STDOUT)
+                        output = proc.communicate()[0]
+                        marks = output.decode('UTF-8')[0]
+                        marks = int(marks)
+                        marks = marks * assignment.weightage
+                        submission.marks = marks
+                        submission.save()
+
+                        assignment.graded = True
+                        assignment.save()
+                    return redirect('/courses/{}/'.format(course_code))
+
+            if "extend" in request.POST and course.canExtendDeadline:
                 assignment.deadline = request.POST['new']
                 assignment.save()
             form2 = Feedback()
@@ -256,7 +342,8 @@ def course_view(request, course_code):
                                                                          'assignment_form': form1,
                                                                          "remove_student_form": form3,
                                                                          "remove_instructor_form": form2,
-                                                                         'assignments': course.assignment_set.all()})
+                                                                         'assignments': course.assignment_set.all(),
+                                                                         'forumOn': course.forumActive})
 
             elif "remove_student_form" in request.POST:
                 form = Removestudent(request.POST)
@@ -275,7 +362,8 @@ def course_view(request, course_code):
                                                                          'assignment_form': form1,
                                                                          "remove_student_form": form3,
                                                                          "remove_instructor_form": form2,
-                                                                         'assignments': course.assignment_set.all()})
+                                                                         'assignments': course.assignment_set.all(),
+                                                                         'forumOn': course.forumActive})
 
             elif "remove_instructor_form" in request.POST:
                 form = Removeinstructor(request.POST)
@@ -294,7 +382,20 @@ def course_view(request, course_code):
                                                                          'assignment_form': form1,
                                                                          "remove_student_form": form3,
                                                                          "remove_instructor_form": form2,
-                                                                         'assignments': course.assignment_set.all()})
+                                                                         'assignments': course.assignment_set.all(),
+                                                                         'forumOn': course.forumActive})
+
+            elif "toggle" in request.POST:
+                course.forumActive = not course.forumActive
+                course.save()
+                return render(request, 'courses/course_view_head.html', {'code': course_code, 'head': profile.name,
+                                                                         'all_students': students,
+                                                                         'all_instructors': instructors,
+                                                                         'assignment_form': form1,
+                                                                         "remove_student_form": form3,
+                                                                         "remove_instructor_form": form2,
+                                                                         'assignments': course.assignment_set.all(),
+                                                                         'forumOn': course.forumActive})
 
             form1 = Assignmentform()
             form2 = Removeinstructor()
@@ -321,7 +422,7 @@ def course_view(request, course_code):
 
             if "assignment_form" in request.POST:
                 form = Assignmentform(request.POST, request.FILES)
-                if form.is_valid():
+                if form.is_valid() and course.canAddAssignment:
                     newAssignment = Assignment(name=request.POST['name'], weightage=request.POST['weightage'],
                                                deadline=request.POST['deadline'], course=course,
                                                problem_statement=request.FILES['problem'], active=True)
@@ -344,15 +445,15 @@ def course_view(request, course_code):
 
             elif "remove_student_form" in request.POST:
                 form = Removestudent(request.POST)
-                if form.is_valid():
+                if form.is_valid() and course.canRemoveStudents:
                     student_profile = Profile.objects.get(roll_number=form.cleaned_data.get('roll_no'))
                     student = Student.objects.filter(obj=student_profile, course=course)[0]
                     student.delete()
+                    messages.success(request, "successfully removed a student")
 
                 form1 = Assignmentform()
                 form2 = Removeinstructor()
                 form3 = Removestudent()
-                messages.success(request, "successfully removed a student")
                 return render(request, 'courses/course_view_ins.html', {'code': course_code, 'head': profile.name,
                                                                          'all_students': students,
                                                                          'all_instructors': instructors,
@@ -453,21 +554,56 @@ def grades(request, course_code):
     head_instructor = course.head_instructor
     profile = head_instructor.UserProfile
     instructors = course.instructor_set.all()
-    if request.user == head_instructor or ins2:
-        data = dict()
-        for assignment in course.assignment_set.all():
-            a = []
-            for submission in assignment.submission_set.all():
-                a.append(submission.marks)
-            data[assignment.name] = a
-        return render(request, 'users/grades.html', {'data': data})
-    elif stud2:
-        data = dict()
+
+    data = []
+    if stud2:
         student = stud2[0]
+        total = 0
+        total2 = 0
+
+        t=0
+        for assignment in course.assignment_set.all():
+            for submission in assignment.submission_set.all():
+                t += submission.marks
+        avg2 = t/len(course.assignment_set.all()[0].submission_set.all())
+
+
+
+
         for submission in student.submission_set.all():
             if submission.assignment.course == course:
-                data[submission.assignment.name] = submission.marks
-        return render(request, 'users/grades.html', {'data': data})
+                total += submission.marks
+                total2 += submission.assignment.weightage
+        for submission in student.submission_set.all():
+            if submission.assignment.course == course:
+                assignment2 = submission.assignment
+                t = 0
+                no = 0
+                for submission2 in assignment2.submission_set.all():
+                    t += submission2.marks
+                    no += 1
+                avg = t/no
+                n = submission.assignment.name.replace(" ", "")
+                data.append(StudentAssignmentData(submission, avg, n))
+    else:
+        for assignment in course.assignment_set.all():
+            n = assignment.name.replace(" ", "")
+            # Calculate marks in various ranges
+            data.append(InstructorAssignmentData(assignment, 0, 0, [0, 5, 6, 4, 8, 1, 0, 0, 0, 0], n))
+
+    if request.user == head_instructor or ins2:
+        # for assignment in course.assignment_set.all():
+        # a = []
+        # for submission in assignment.submission_set.all():
+        #     a.append(submission.marks)
+        # data[assignment.name] = a
+        return render(request, 'courses/grades.html', {'assignments': data, 'is_head': True, 'is_stud': False})
+    elif stud2:
+        student = stud2[0]
+        # for submission in student.submission_set.all():
+        #     if submission.assignment.course == course:
+        #         data[submission.assignment.name] = submission.marks
+        return render(request, 'courses/grades.html', {'assignments': data, 'is_stud': True, 'is_head': False, 'length': len(course.assignment_set.all()), 'total': total, 'total2': total2, 'avg2': avg2})
     else:
         return redirect('/courses/{}/'.format(course_code))
 
@@ -483,22 +619,26 @@ def cli(request):
         else:
             break
 
-    return redirect()
+    return redirect('/')
 
 
 @login_required(login_url="/login/")
 def forum(request, course_code):
     profile = Profile.objects.all()
     course = Course.objects.get(course_code=course_code)
-    if request.method == "POST":
-        user = request.user
-        content = request.POST.get('content','')
-        post = Post(user1=user, post_content=content, course=course)
-        post.save()
-        alert = True
-        return render(request, "forum/forum.html", {'alert': alert})
-    # posts = Post.objects.filter().order_by('-timestamp')
-    return render(request, "forum/forum.html", {'posts': course.post_set.all().order_by('-timestamp'), 'code': course_code})
+    print(course.forumActive)
+    if course.forumActive:
+        if request.method == "POST":
+            user = request.user
+            content = request.POST.get('content','')
+            post = Post(user1=user, post_content=content, course=course)
+            post.save()
+            alert = True
+            return render(request, "forum/forum.html", {'alert': alert})
+        # posts = Post.objects.filter().order_by('-timestamp')
+        return render(request, "forum/forum.html", {'posts': course.post_set.all().order_by('-timestamp'), 'code': course_code})
+    else:
+        return redirect('/courses/{}/'.format(course_code))
 
 
 @login_required(login_url="/login/")
@@ -509,8 +649,8 @@ def discussion(request, myid, course_code):
     if request.method == "POST":
         user = request.user
         desc = request.POST.get('desc','')
-        post_id =request.POST.get('post_id','')
-        reply = Replie(user = user, reply_content = desc, post=post, course=course)
+        post_id = request.POST.get('post_id','')
+        reply = Replie(user=user, reply_content=desc, post=post, course=course)
         reply.save()
         alert = True
         return render(request, "forum/discussion.html", {'alert':alert})
@@ -525,7 +665,7 @@ def convos(request):
     convos2 = Conversations.objects.filter(user2=user)
 
     form = Conversationform()
-    if request.method=="POST":
+    if request.method == "POST":
         form1 = Conversationform(request.POST)
         if form1.is_valid():
             user1 = request.user
@@ -539,7 +679,7 @@ def convos(request):
         return render(request, "conversations/conversations.html", {'convos': convos, 'convos2': convos2, 'form': form})
     else:
         return render(request, "conversations/conversations.html", {'users': profile, 'convos': convos, 'convos2': convos2, 'form': form})
-    return render(request, "conversations/conversations.html", {'users': profile, 'convos': convos, 'convos2': convos2, 'form': form})
+    # return render(request, "conversations/conversations.html", {'users': profile, 'convos': convos, 'convos2': convos2, 'form': form})
 
 
 @login_required(login_url="/login/")
