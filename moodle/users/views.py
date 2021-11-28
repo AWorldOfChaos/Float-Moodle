@@ -10,6 +10,7 @@ from django.conf import settings
 import os
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import send_mail
+import subprocess
 # Create your views here.
 
 
@@ -189,6 +190,29 @@ def assignments(request, course_code, assignment_id):
                     evaluation.evaluate()
                     return redirect('/courses/{}/'.format(course_code))
             
+            if "autograde" in request.POST:
+                form = Feedback(request.POST, request.FILES)
+                if form.is_valid():
+                    script_file = request.FILES['feedback']
+                    evaluation = Evaluation(assignment=assignment, csv_file=script_file)
+                    evaluation.save()
+                    filePath = os.path.join(settings.MEDIA_ROOT, evaluation.csv_file.name)
+                    for submission in assignment.submission_set.all():
+                        filename1 = submission.submittedFile.name.split('/')[-1]
+                        filepath1 = os.path.join(settings.MEDIA_ROOT, submission.submittedFile.name)
+                        proc = subprocess.Popen(['python', filePath, filepath1], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                        output = proc.communicate()[0]
+                        marks = output.decode('UTF-8')[0]
+                        marks = int(marks)
+                        marks = marks*assignment.weightage
+                        submission.marks = marks
+                        submission.save()
+                        
+                        assignment.graded = True
+                        assignment.save()
+                    return redirect('/courses/{}/'.format(course_code))
+
+
             if "extend" in request.POST:
                 assignment.deadline = request.POST['new']
                 assignment.save()

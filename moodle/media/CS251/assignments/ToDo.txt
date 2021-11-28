@@ -1,0 +1,6 @@
+1. Create submission models when student joins
+2. Express deadline at assignment
+3. Default marks = 0
+4. Marks in csv as percentage and displayed well on grades' frontend
+5. Complete and integrate communication module
+6. Complete and integrate CLI
