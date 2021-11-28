@@ -1,5 +1,5 @@
 {% load crispy_forms_tags %}
-<button><a href="{% url 'Conversations' %}">Home</a> </button>
+<button><a href="{% url 'home' %}">Home</a> </button>
 <h2>Conversations</h2>
 {% for convo in convos %}
       <li><a href="messages/{{convo.id}}">{{convo.user1.UserProfile.name}}-{{convo.user2.UserProfile.name}}</a></li>
