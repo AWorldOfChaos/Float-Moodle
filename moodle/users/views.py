@@ -56,6 +56,21 @@ class InstructorAssignmentData:
         self.y9 = x9
         self.y10 = x10
 
+        l = []
+
+        l.append({"x": 5, "y": self.y1})
+        l.append({"x": 15, "y": self.y2})
+        l.append({"x": 25, "y": self.y3})
+        l.append({"x": 35, "y": self.y4})
+        l.append({"x": 45, "y": self.y5})
+        l.append({"x": 55, "y": self.y6})
+        l.append({"x": 65, "y": self.y7})
+        l.append({"x": 75, "y": self.y8})
+        l.append({"x": 85, "y": self.y9})
+        l.append({"x": 95, "y": self.y10})
+
+        self.plot_data = json.dumps(l)
+
 
 class StatisticData:
     def __init__(self, a, avg, n, var, w):

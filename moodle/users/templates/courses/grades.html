@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css"
         integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous" />
     <!-- jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-box-and-violin-plot@4.0.0/build/Chart.BoxPlot.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://kit.fontawesome.com/c70797d3ad.js" crossorigin="anonymous"></script>
     <script src="{% static 'users/filter.js' %}"></script>
@@ -197,61 +199,83 @@
             $(document).ready(function () {
                 // for drawing histograms
             {% for assignment in assignments %}
+            var dataset1 = []
+            var z = 5;
 
-            var bgColor1 = [];
-            for (var i = 1; i < 10; i++) {
-                bgColor1.push('rgba(54, 162, 235, 0.2)');
-            }
+            var data1=[]
+            data1.push({ x: 5, y: {{ assignment.y1 }}})
+            data1.push({ x: 15, y: {{ assignment.y2 }}})
+            data1.push({ x: 25, y: {{ assignment.y3 }}})
+            data1.push({ x: 35, y: {{ assignment.y4 }}})
+            data1.push({ x: 45, y: {{ assignment.y5 }}})
+            data1.push({ x: 55, y: {{ assignment.y6 }}})
+            data1.push({ x: 65, y: {{ assignment.y7 }}})
+            data1.push({ x: 75, y: {{ assignment.y8 }}})
+            data1.push({ x: 85, y: {{ assignment.y9 }}})
+            data1.push({ x: 95, y: {{ assignment.y10 }}})
 
-            var borColor1 = []
-            for (var j = 1; j <10 ; j++) {
-                borColor1.push('rgb(54, 162, 235)');
-            }
-
-            var dataset1 = {
-                label: '{{ assignment.assignment.name }}',
-            data: [{{assignment.y1}}, {{assignment.y2}}, {{assignment.y3}}, {{assignment.y4}}, {{assignment.y5}},
-            {{assignment.y6}}, {{assignment.y7}}, {{assignment.y8}}, {{assignment.y9}}, {{assignment.y10}},],
-            backgroundColor: bgColor1,
-            borderColor: borColor1,
-            borderWidth: 1
-                }
-
-            const ctx = document.getElementById('{{ assignment.assignment.id }}').getContext('2d');
-
-            var chart = new Chart(ctx, {
-                type: 'bar',
+            console.log({{ assignment.plot_data | safe }});
+            new Chart(document.getElementById('{{ assignment.assignment.id }}').getContext('2d'), {
+            type: 'bar',
             data: {
-                labels: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],//loop through queryset,
-            datasets: [
-            dataset1
-            ]
-                    },
-            options: {
-                scales: {
-                xAxes: [{
-                display: false,
+
+                datasets: [{
+                    label: '{{ assignment.assignment.name}}',
+                    data: {{ assignment.plot_data | safe }},
+            backgroundColor: [
+                'rgba(54, 162, 235, 0.2)'
+            ],
+            borderColor: [
+                'rgba(54, 162, 235, 1)',
+            ],
+            borderWidth: 1,
             barPercentage: 1,
             categoryPercentage: 1,
-            ticks: {
-                max: 3,
-                                }
-                            }, {
-                display: true,
-            ticks: {
-                autoSkip: false,
-            max: 4,
-                                }
-                            }],
-            yAxes: [{
-                ticks: {
-                beginAtZero: true
-                                }
-                            }]
+        }]
+                },
+        options: {
+            scales: {
+                x: {
+                    type: 'linear',
+                        offset: false,
+                            grid: {
+                        offset: false,
+                            },
+                    ticks: {
+                        stepSize: 10,
+                            },
+                    title: {
+                        display: true,
+                            text: 'Percentage Marks'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                            text: 'Score',
+                        }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: (items) => {
+                            if (!items.length) {
+                                return '';
+                            }
+                            const item = items[0];
+                            const x = item.parsed.x;
+                            const min = x - 5;
+                            const max = x + 5;
+                            var ans = min.toString(10) + "-" + max.toString(10)
+                            return ans;
                         }
                     }
-                });
-            {% endfor %}
+                }
+            }
+        }
+            });
+        {% endfor %}
 
             const data = {
             labels: {{ Instructor_Mean_Chart.assignment_names | safe }},
@@ -536,18 +560,7 @@
                             </td>
                         </tr>
                         {% endfor %}
-                        <tr>
-                            <td><div>
-                                    <i class="far fa-file"
-                                        style="margin-right: 10px;align-self: center;color:#424a53"></i><a
-                                        href="courses/{{code}}/assignment/{{assignment.assignment.id}}">Total</a>
 
-                                </div>
-                            </td>
-                            <td>{{total}}</td>
-                            <td>{{total2}}</td>
-                            <td>{{avg2}}</td>
-                        </tr>
 
 
                     </tbody>
