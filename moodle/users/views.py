@@ -13,6 +13,8 @@ from prompt_toolkit.history import FileHistory
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from django.core.files.storage import FileSystemStorage
 import subprocess
+import math
+import json
 
 
 # Create your views here.
@@ -36,13 +38,84 @@ class StudentAssignmentData:
 
 
 class InstructorAssignmentData:
-    def __init__(self, a, avg, var, lst, n):
+    def __init__(self, a, avg, var, n, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10):
         self.assignment = a
         self.average = avg
         self.variance = var
         # self.number = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        self.numbers = lst
         self.name = n
+        self.y1 = x1
+        self.y2 = x2
+        self.y3 = x3
+        self.y4 = x4
+        self.y5 = x5
+        self.y6 = x6
+        self.y7 = x7
+        self.y8 = x8
+        self.y9 = x9
+        self.y10 = x10
+
+
+class StatisticData:
+    def __init__(self, a, avg, n, var, w):
+        self.assignment = a
+        self.average = avg
+        self.name = n
+        self.variance = var
+        self.weightage = w
+
+
+class StudentChartData:
+
+    def __init__(self, data):
+        abgC = []
+        abC = []
+        for i in range(len(data)):
+            abgC.append('rgba(75, 192, 192, 0.2)')
+            abC.append('rgba(75, 192, 192, 1)')
+
+        self.averagebgColor = json.dumps(abgC)
+        self.averageBorderColor = json.dumps(abC)
+
+        abgC = []
+        for i in range(len(data)):
+            abgC.append('rgba(54, 162, 235, 0.2)')
+            abC.append('rgba(54, 162, 235, 1)')
+
+        self.studentbgColor = json.dumps(abgC)
+        self.studentBorderColor = json.dumps(abC)
+
+        aN = []
+        for i in range(len(data)):
+            aN.append(data[i].submission.assignment.name)
+
+        self.assignment_names = json.dumps(aN)
+
+        aD = []
+        for i in range(len(data)):
+            aD.append(data[i].submission.marks)
+
+        self.data = json.dumps(aD)
+
+        cA = []
+        for i in range(len(data)):
+            cA.append(data[i].average)
+
+        self.class_average = json.dumps(cA)
+
+
+class InstructorMeanChart:
+    def __init__(self, data):
+        m = []
+        for i in range(len(data)):
+            m.append(data[i].average)
+        self.means = json.dumps(m)
+
+        aN = []
+        for i in range(len(data)):
+            aN.append(data[i].assignment.name)
+
+        self.assignment_names = json.dumps(aN)
 
 
 def register(request):
@@ -556,19 +629,17 @@ def grades(request, course_code):
     instructors = course.instructor_set.all()
 
     data = []
+    data2 = []
     if stud2:
         student = stud2[0]
         total = 0
         total2 = 0
 
-        t=0
+        t = 0
         for assignment in course.assignment_set.all():
             for submission in assignment.submission_set.all():
                 t += submission.marks
         avg2 = t/len(course.assignment_set.all()[0].submission_set.all())
-
-
-
 
         for submission in student.submission_set.all():
             if submission.assignment.course == course:
@@ -588,8 +659,35 @@ def grades(request, course_code):
     else:
         for assignment in course.assignment_set.all():
             n = assignment.name.replace(" ", "")
-            # Calculate marks in various ranges
-            data.append(InstructorAssignmentData(assignment, 0, 0, [0, 5, 6, 4, 8, 1, 0, 0, 0, 0], n))
+            y = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+            t = 0
+            v = 0
+            for submission in assignment.submission_set.all():
+                t += submission.marks
+            avg = t / len(assignment.submission_set.all())
+            for submission in assignment.submission_set.all():
+                v += (submission.marks - avg) * (submission.marks - avg)
+            v = v / len(assignment.submission_set.all())
+
+            for submission in assignment.submission_set.all():
+                y[math.floor(10*submission.marks/assignment.weightage)] += 1
+
+            d = InstructorAssignmentData(assignment, avg, v, n, y[0], y[1], y[2], y[3], y[4], y[5], y[6], y[7], y[8],
+                                         y[9])
+            data.append(d)
+
+            # t = 0
+            # v = 0
+            # for submission in assignment.submission_set.all():
+            #     t += submission.marks
+            # avg = t/len(assignment.submission_set.all())
+            # for submission in assignment.submission_set.all():
+            #     v += (submission.marks-avg)*(submission.marks-avg)
+            # v = v/len(assignment.submission_set.all())
+
+            n = assignment.name.replace(" ", "")
+            data2.append(StatisticData(assignment, avg, n, v, assignment.weightage))
 
     if request.user == head_instructor or ins2:
         # for assignment in course.assignment_set.all():
@@ -597,13 +695,13 @@ def grades(request, course_code):
         # for submission in assignment.submission_set.all():
         #     a.append(submission.marks)
         # data[assignment.name] = a
-        return render(request, 'courses/grades.html', {'assignments': data, 'is_head': True, 'is_stud': False})
+        return render(request, 'courses/grades.html', {'assignments': data, 'assignments2': data2, 'is_head': True, 'is_stud': False, 'Instructor_Mean_Chart': InstructorMeanChart(data),})
     elif stud2:
         student = stud2[0]
         # for submission in student.submission_set.all():
         #     if submission.assignment.course == course:
         #         data[submission.assignment.name] = submission.marks
-        return render(request, 'courses/grades.html', {'assignments': data, 'is_stud': True, 'is_head': False, 'length': len(course.assignment_set.all()), 'total': total, 'total2': total2, 'avg2': avg2})
+        return render(request, 'courses/grades.html', {'assignments': data, 'is_stud': True, 'is_head': False, 'length': len(course.assignment_set.all()), 'total': total, 'total2': total2, 'avg2': avg2, 'Student_graph': StudentChartData(data)})
     else:
         return redirect('/courses/{}/'.format(course_code))
 

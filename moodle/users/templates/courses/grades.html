@@ -22,7 +22,6 @@
         // jquery function
         $(document).ready(function () {
             var ctx = document.getElementById('myChart').getContext('2d');
-
             var bgColor = [];
             for (var i = 1; i < `{{ data_length }}`; i++) {
                 bgColor.push(getRandomColor());
@@ -35,7 +34,6 @@
                         label: '',
                         data: [`{% for assignment_mark in assignment_marks %}` `{{ assignment_mark }}`, `{% endfor %}`],
                         backgroundColor: [getRandomColor(),],
-
                         borderWidth: 1
                     }]
                 },
@@ -61,7 +59,6 @@
             const delta = max - min;
             return Array.from({ length: count }).map(() => Math.random() * delta + min);
         }
-
         const boxplotData = {
             // define label tree
             labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -117,7 +114,6 @@
                     }
                 }
             });
-
         };
     </script> -->
     {% if is_stud %}
@@ -126,71 +122,53 @@
         $(document).ready(function () {
             var ctx = document.getElementById('myChart').getContext('2d');
 
-            var bgColor1 = [];
-            for (var i = 1; i < {{length}}; i++) {
-                bgColor1.push('rgba(54, 162, 235, 0.2)');
-            }
 
-            var borColor1 = []
-            for (var j = 1; j < {{length}}; j++) {
-                borColor1.push('rgb(54, 162, 235)');
-            }
-            var bgColor2 = [];
-            for (var i = 1; i < {{length}}; i++) {
-                bgColor2.push('rgba(54, 162, 235, 0.2)');
-            }
 
-            var borColor2 = []
-            for (var j = 1; j < {{length}}; j++) {
-                borColor2.push('rgb(54, 162, 235)');
-            }
-
-            var dataset1 = {
-                label: 'your',
-                data: [{% for assignment in assignments %} {{assignment.submission.marks}}, {% endfor %}],
-                backgroundColor: bgColor1,
-                borderColor: borColor1,
-                borderWidth: 1
-            }
-
-            var dataset2 = {
-                label: 'Class Average',
-                data: [{% for assignment in assignments %} {{assignment.average}}, {% endfor %}],
-                backgroundColor: bgColor2,
-                borderColor: borColor2,
-                borderWidth: 1
-            }
-            var myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: [{% for assignment in assignments %} {{assignment.submission.assignment.name}}, {% endfor %}],//loop through queryset,
-                    datasets: [
-                        dataset1, dataset2
-                    ]
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{ Student_graph.assignment_names | safe }},//loop through queryset,
+                datasets: [
+                {
+                    label: 'your',
+                    data: {{ Student_graph.data | safe }},
+                    backgroundColor: {{ Student_graph.studentbgColor | safe }},
+                    borderColor: {{ Student_graph.studentBorderColor | safe }},
+                    borderWidth: 1,
                 },
-                options: {
-                    barValueSpacing: 10,
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                min: 0,
-                            }
-                        }]
-                    }
+                {
+                    label: 'Class Average',
+                    data: {{ Student_graph.class_average | safe }},
+                    backgroundColor: {{ Student_graph.averagebgColor | safe }},
+                    borderColor: {{ Student_graph.averageBorderColor | safe }},
+                    borderWidth: 1
+                },
+                ]
+            },
+            options: {
+                barValueSpacing: 10,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                        }
+                    }]
                 }
-            });
+            }
         });
-        </script>
-        <script>
+        });
+    </script>
+
+    <script>
         function change_tab(tab_name) {
-            var tabs=["#Problem-Statement","#Feedback","#Submission"]
+            var tabs = ["#Problem-Statement", "#Submission"]
             tabs.push();
             tabs.push();
 
             for (var t of tabs) {
                 if (t !== tab_name) {
                     var c = $(t).prop("classList");
-                    if (c[0] !== "active-tab") {
+                    if ( c[0] !== "active-tab") {
                         $(t).addClass("non-active-tab");
                     }
                     else {
@@ -213,8 +191,8 @@
             }
         }
     </script>
-        {% endif %}
-        {% if is_head %}
+    {% endif %}
+    {% if is_head %}
         <script>
             $(document).ready(function () {
                 // for drawing histograms
@@ -232,7 +210,8 @@
 
             var dataset1 = {
                 label: '{{ assignment.assignment.name }}',
-            data: [{% for number in assignment.numbers %} {{ number }}, {% endfor %}],
+            data: [{{assignment.y1}}, {{assignment.y2}}, {{assignment.y3}}, {{assignment.y4}}, {{assignment.y5}},
+            {{assignment.y6}}, {{assignment.y7}}, {{assignment.y8}}, {{assignment.y9}}, {{assignment.y10}},],
             backgroundColor: bgColor1,
             borderColor: borColor1,
             borderWidth: 1
@@ -252,7 +231,8 @@
                 scales: {
                 xAxes: [{
                 display: false,
-            barPercentage: 1.3,
+            barPercentage: 1,
+            categoryPercentage: 1,
             ticks: {
                 max: 3,
                                 }
@@ -271,7 +251,39 @@
                         }
                     }
                 });
-            `{% endfor %}`
+            {% endfor %}
+
+            const data = {
+            labels: {{ Instructor_Mean_Chart.assignment_names | safe }},
+            datasets: [{
+                label: 'Mean',
+                data: {{ Instructor_Mean_Chart.means | safe }} ,
+                backgroundColor: [
+                    'rgba(255, 159, 64, 0.2)',
+                ],
+                borderColor: [
+                    'rgb(255, 159, 64)',
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            },
+        };
+        const ctx2 = document.getElementById('mean').getContext('2d');
+        const myC = new Chart(ctx2, config );
+
+
+
 
             });
     </script>
@@ -282,7 +294,6 @@
             {% for assignment in assignments %}
             tabs.push('#{{ assignment.name }}');
             {% endfor %}
-            tabs.push("#Submission");
             tabs.push("#Feedback");
 
             for (var t of tabs) {
@@ -454,7 +465,7 @@
 
 
         </div>
-        <div id="Submission" class="active-tab" style="width:100%; ">
+        <div id="Submission" class="non-active-tab" style="width:100%; ">
                 <canvas id="myChart" width="400" height="100"></canvas>
         </div>
         <script>
@@ -492,7 +503,57 @@
                 </div>
             </div>
             <div id="Problem-Statement" class="active-tab" style="width:100%; ">
+                    <div class="course-assignment" style="padding: 0;margin-left: 20px;margin-top: 0px;">
 
+
+                <table style="margin: 0;width: 100%;">
+                    <tbody>
+                        <tr>
+                            <th>Assignment</th>
+                            <th>Average</th>
+                            <th>Variance</th>
+                            <th>Weightage</th>
+                        </tr>
+
+                        {% for assignment in assignments2 %}
+                        <tr>
+                            <td>
+                                <div>
+                                    <i class="far fa-file"
+                                        style="margin-right: 10px;align-self: center;color:#424a53"></i><a
+                                        href="courses/{{code}}/assignment/{{assignment.assignment.id}}">{{assignment.name}}</a>
+
+                                </div>
+                            </td>
+                            <td>
+                                {{assignment.average}}
+                            </td>
+                            <td>
+                                {{assignment.variance}}
+                            </td>
+                            <td>
+                                {{assignment.weightage}}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td><div>
+                                    <i class="far fa-file"
+                                        style="margin-right: 10px;align-self: center;color:#424a53"></i><a
+                                        href="courses/{{code}}/assignment/{{assignment.assignment.id}}">Total</a>
+
+                                </div>
+                            </td>
+                            <td>{{total}}</td>
+                            <td>{{total2}}</td>
+                            <td>{{avg2}}</td>
+                        </tr>
+
+
+                    </tbody>
+
+                </table>
+            </div>
             </div>
             {% for assignment in assignments %}
             <div id="{{assignment.name}}" class="non-active-tab" style="width:100%; ">
@@ -500,7 +561,7 @@
             </div>
             {% endfor %}
             <div id="Feedback" class="non-active-tab" style="width:100%; ">
-
+                <canvas id="mean" width="400" height="100"></canvas>
             </div>
 
         </div>

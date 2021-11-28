@@ -95,7 +95,7 @@ class Evaluation(models.Model):
             profile = Profile.objects.get(roll_number= roll_number)
             student_instance = self.assignment.course.student_set.filter(obj=profile)[0]
             submission = self.assignment.submission_set.filter(student=student_instance)[0]
-            submission.marks = marks*self.assignment.weightage/100
+            submission.marks = int(marks)*self.assignment.weightage/100
             submission.save()
         self.assignment.graded = True
         self.assignment.save()
