@@ -1,0 +1,7 @@
+asgiref==3.4.1
+Django==3.2.7
+django-crispy-forms==1.13.0
+prompt-toolkit==3.0.23
+pytz==2021.1
+sqlparse==0.4.2
+wcwidth==0.2.5

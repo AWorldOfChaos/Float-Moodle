@@ -14,6 +14,7 @@ from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from django.core.files.storage import FileSystemStorage
 import subprocess
 import math
+from django.core.mail import send_mail
 import json
 
 
@@ -228,8 +229,16 @@ def course_create(request):
             course_code = form.cleaned_data.get('course_code')
             course_name = form.cleaned_data.get('course_name')
             join_code = form.cleaned_data.get('join_code')
+            can_grade = form.cleaned_data.get('canGrade')
+            can_add = form.cleaned_data.get('canAddAssignment')
+            can_remove = form.cleaned_data.get('canRemoveStudents')
+            can_extend = form.cleaned_data.get('canExtendDeadline')
             course = Course.objects.create(head_instructor=request.user, course_name=course_name,
-                                           course_code=course_code, join_code=join_code, forumActive=True)
+                                           course_code=course_code, join_code=join_code, forumActive=True,
+                                           canGrade=can_grade, canAddAssignment=can_add,
+                                           canRemoveStudents=can_remove, canExtendDeadline=can_extend)
+            send_mail('course creation on Moodle', 'you have created a new course on moodle', 'sslproject1000@gmail.com', [request.user.email],
+            fail_silently= False)
             course.save()
             return redirect('/courses/{}/'.format(course_code))
     else:
@@ -273,6 +282,8 @@ def assignments(request, course_code, assignment_id):
                         submission.submittedFile = request.FILES['solution']
                         submission.submitted = True
                         submission.save()
+                        send_mail('course creation on Moodle', 'you have made a submission to an assignment.', 'sslproject1000@gmail.com', [request.user.email],
+                        fail_silently= False)
                         return redirect('/courses/{}/'.format(course_code))
                     form1 = SubmissionForm
                     return render(request, 'assignments/assignment_view.html',
@@ -671,7 +682,10 @@ def grades(request, course_code):
             v = v / len(assignment.submission_set.all())
 
             for submission in assignment.submission_set.all():
-                y[math.floor(10*submission.marks/assignment.weightage)] += 1
+                if submission.marks >= assignment.weightage:
+                    y[9] += 1
+                else:
+                    y[math.floor(10*submission.marks/assignment.weightage)] += 1
 
             d = InstructorAssignmentData(assignment, avg, v, n, y[0], y[1], y[2], y[3], y[4], y[5], y[6], y[7], y[8],
                                          y[9])
