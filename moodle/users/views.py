@@ -430,6 +430,8 @@ def course_view(request, course_code):
                     for student in students:
                         submission = Submission(assignment=newAssignment, student=student)
                         submission.save()
+                        send_mail('course creation on Moodle', 'A new assignment has been added on moodle', 'sslproject1000@gmail.com', [student.obj.user.email],
+                        fail_silently=False)
                     return redirect('assignments', course_code=course.course_code, assignment_id=newAssignment.id)
 
                 form1 = Assignmentform()
